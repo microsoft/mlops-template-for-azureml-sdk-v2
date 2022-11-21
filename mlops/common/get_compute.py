@@ -23,7 +23,7 @@ def get_compute(
             compute_object = client.compute.get(cluster_name)
             print(f"Found existing compute target {cluster_name}, so using it.")  
         except:
-            print(f"{cluster_name} is not found! Trying to create a new one")
+            print(f"{cluster_name} is not found! Trying to create a new one.")
             compute_object = AmlCompute(
                 name=cluster_name,
                 type="amlcompute",
@@ -34,7 +34,7 @@ def get_compute(
                 idle_time_before_scale_down=idle_time_before_scale_down,
             )
             compute_object = client.compute.begin_create_or_update(compute_object).result()
-            print(f"A new cluster {cluster_name} has been created")
+            print(f"A new cluster {cluster_name} has been created.")
             return compute_object
     except Exception as ex:
         print("Oops!  invalid credentials.. Try again...")

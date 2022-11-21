@@ -9,12 +9,14 @@ def get_workspace(
     workspace_name: str
 ):
     try:
+        print(f"Getting access to {workspace_name} workspace.")
         client = MLClient(DefaultAzureCredential(),
             subscription_id=subscription_id,
             resource_group_name=resource_group_name,
             workspace_name=workspace_name)
 
-        workspace = client.workspaces.get(args.workspace_name)
+        workspace = client.workspaces.get(workspace_name)
+        print(f"Reference to {workspace_name} has been obtained.")
         return workspace
     except Exception as ex:
         print("Oops!  invalid credentials.. Try again...")
