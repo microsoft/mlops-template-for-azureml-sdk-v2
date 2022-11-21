@@ -1,0 +1,30 @@
+
+steps:
+  - task: AzureCLI@2
+    displayName: Execute Azure ML pipeline job
+    continueOnError: false
+    inputs: 
+      azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+      scriptType: bash
+      workingDirectory: $(System.DefaultWorkingDirectory)
+      scriptLocation: inlineScript
+      inlineScript: |
+         python mlops/nyc-taxi/src/mlops_regression_pipeline.py \
+          --subscription_id $(SUBSCRIPTION_ID) \
+          --resource_group_name $(RESOURCE_GROUP_NAME) \
+          --workspace_name $(WORKSPACE_NAME) \
+          --cluster_name $(CLUSTER_NAME) \
+          --build_reference $(BUILD.BUILDID) \
+          --deploy_environment ${{parameters.exec_environment}} \
+          --experiment_name $(EXPERIMENT_NAME) \
+          --ml_pipeline_name $(PIPELINE_NAME) \
+          --wait_for_completion $(WAIT_FOR_COMPLETION) \
+          --pipeline_pat ${{parameters.PIPELINE_PAT}} \
+          --register_pipeline_definition_number $(REGISTER_PIPELINE_DEFINITION_NUMBER) \
+          --register_pipeline_version_number $(REGISTER_PIPELINE_VERSION_NUMBER) \
+          --org_name $(ORG_NAME)  \
+          --project_name $SYSTEM_TEAMPROJECT \
+          --azdo_pipeline_rest_version $(AZDO_PIPELINE_REST_VERSION)\
+          --environment_name $(ENVIRONMENT_NAME) \
+          --error_pipeline_definition_number $(ERROR_PIPELINE_DEFINITION_NUMBER) \
+          --error_pipeline_version_number $(ERROR_PIPELINE_VERSION_NUMBER) 

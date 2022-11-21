@@ -1,0 +1,89 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+- name: envSelection
+  type: string
+- name: runid
+  type: string
+- name: runuri
+  type: string
+- name: r2_score
+  type: string
+- name: mean_squared_error
+  type: string
+- name: trigger_buildid
+  type: string
+
+variables:
+- group: MLOps-${{parameters.envSelection}}-VG
+
+stages:
+- stage: EvaluateModels
+  jobs:
+  - job: CompareModelPerformanceData
+    steps:
+    - template: templates/configure_azureml_agent.yml
+    - template: templates/connect_to_workspace.yml
+    - task: AzureCLI@2
+      displayName: Compare existing and new model
+      inputs: 
+        azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          MODEL_TO_COMPARE=$(printf "%s_%s" $(model_name) ${{parameters.envSelection}})
+          python mlops/nyc-taxi/src/compare_models.py \
+            --subscription_id $(SUBSCRIPTION_ID) \
+            --resource_group_name  $(RESOURCE_GROUP_NAME) \
+            --workspace_name $(WORKSPACE_NAME)  \
+            --model_name $MODEL_TO_COMPARE \
+            --r2_score ${{parameters.r2_score}} \
+            --mean_squared_error ${{parameters.mean_squared_error}}     
+
+- stage: ApprovalRequired
+  dependsOn:
+  - EvaluateModels
+  condition: succeeded('EvaluateModels')
+  jobs:
+  - deployment: approvalRequired
+    environment: "approval-environment"
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: echo "Approving will register the model in the workspace"
+
+- stage: RegisterModel
+  dependsOn:
+  - ApprovalRequired
+  condition: succeeded('ApprovalRequired')
+  jobs:
+  - job: ModelRegistration
+    steps:
+    - task: UsePythonVersion@0
+      displayName: "install python 3.8"
+      continueOnError: false
+      inputs: 
+        versionSpec: '3.8'
+    - template: templates/configure_azureml_agent.yml
+    - template: templates/connect_to_workspace.yml
+    - task: AzureCLI@2
+      displayName: Register the Model
+      inputs: 
+        azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          MODEL_NAME_TO_REGISTER=$(printf "%s_%s" $(model_name) ${{parameters.envSelection}})
+          python mlops/nyc-taxi/src/register_model.py \
+            --subscription_id $(SUBSCRIPTION_ID) \
+            --resource_group_name  $(RESOURCE_GROUP_NAME) \
+            --workspace_name $(WORKSPACE_NAME)  \
+            --model_run_path ${{ parameters.runuri }}   \
+            --model_name $MODEL_NAME_TO_REGISTER \
+            --r2_score ${{ parameters.r2_score }} \
+            --mean_squared_error ${{ parameters.mean_squared_error }} \
+            --trigger_buildid ${{ parameters.trigger_buildid }}   

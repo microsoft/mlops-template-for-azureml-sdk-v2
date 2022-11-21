@@ -1,0 +1,34 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+- name: env_selection
+  type: string
+- name: trigger_buildid
+  type: string
+- name: error_message
+  type: string
+- name: error_step
+  type: string
+
+variables:
+- group: MLOps-${{parameters.env_selection}}-VG
+
+stages:
+- stage: Errorhandler
+  jobs:
+  - job: raiseerror
+    steps:
+    - task: AzureCLI@2
+      displayName: show error
+      inputs: 
+        azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo "*********** Error in Azure Machine learning pipeline job ***********"  
+          echo "Error in ${{parameters.env_selection}} environment with build id ${{parameters.trigger_buildid}}"
+          echo "The error found in ${{parameters.error_step}} step of Machine Learning pipeline Job"
+          echo "The error message is ${{parameters.error_message}}" 

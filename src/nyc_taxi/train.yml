@@ -1,0 +1,47 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: train_linear_regression_model
+display_name: TrainLinearRegressionModel
+version: 1
+type: command
+inputs:
+  training_data: 
+    type: uri_folder
+  org_name:
+    type: string
+  project_name:
+    type: string
+  pipeline_pat:
+    type: string
+  azdo_pipeline_rest_version:
+    type: string
+  error_pipeline_definition_number:
+    type: string
+  error_pipeline_version_number:
+    type: string
+  env_selection:
+    type: string
+  build_number:
+    type: string
+outputs:
+  model_output:
+    type: mlflow_model
+  model_perf_data:
+    type: uri_file
+  test_data:
+    type: uri_folder
+code: ./../
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+command: >-
+  python nyc_taxi/train_src/train.py 
+  --training_data ${{inputs.training_data}} 
+  --test_data ${{outputs.test_data}} 
+  --model_output ${{outputs.model_output}}
+  --model_perf_data ${{outputs.model_perf_data}}
+  --org_name ${{inputs.org_name}}
+  --project_name ${{inputs.project_name}}
+  --pipeline_pat ${{inputs.pipeline_pat}}
+  --azdo_pipeline_rest_version ${{inputs.azdo_pipeline_rest_version}}
+  --error_pipeline_definition_number ${{inputs.error_pipeline_definition_number}}
+  --error_pipeline_version_number ${{inputs.error_pipeline_version_number}}
+  --build_number ${{inputs.build_number}}
+  --env_selection ${{inputs.env_selection}}

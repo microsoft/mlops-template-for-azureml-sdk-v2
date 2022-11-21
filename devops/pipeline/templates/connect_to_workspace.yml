@@ -1,0 +1,14 @@
+steps:
+- task: AzureCLI@2
+  displayName: Connect to AML Workspace using python sdk
+  inputs:
+    azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az configure --defaults group=$(RESOURCE_GROUP_NAME) workspace=$(WORKSPACE_NAME)
+      python mlops/nyc-taxi/src/connect_workspace.py \
+      --subscription_id $(SUBSCRIPTION_ID) \
+      --resource_group_name $(RESOURCE_GROUP_NAME) \
+      --workspace_name $(WORKSPACE_NAME)
+      

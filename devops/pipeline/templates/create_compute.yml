@@ -1,0 +1,16 @@
+
+steps:
+  - task: AzureCLI@2
+    displayName: Create Azure ML Compute Cluster
+    inputs: 
+      azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        python mlops/nyc-taxi/src/prep_compute.py \
+        --subscription_id $(SUBSCRIPTION_ID) \
+        --resource_group_name $(RESOURCE_GROUP_NAME) \
+        --workspace_name $(WORKSPACE_NAME) \
+        --cluster_name $(CLUSTER_NAME) \
+        --cluster_size $(CLUSTER_SIZE) \
+        --cluster_region $(CLUSTER_REGION)

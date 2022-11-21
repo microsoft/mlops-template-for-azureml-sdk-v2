@@ -1,0 +1,42 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: taxi_feature_engineering
+display_name: TaxiFeatureEngineering
+version: 1
+type: command
+inputs:
+  clean_data: 
+    type: uri_folder 
+  org_name:
+    type: string
+  project_name:
+    type: string
+  pipeline_pat:
+    type: string
+  azdo_pipeline_rest_version:
+    type: string
+  error_pipeline_definition_number:
+    type: string
+  error_pipeline_version_number:
+    type: string
+  env_selection:
+    type: string
+  build_number:
+    type: string
+outputs:
+  transformed_data:
+    type: uri_folder
+code: ./../
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+command: >-
+  python nyc_taxi/transform_src/transform.py 
+  --clean_data ${{inputs.clean_data}} 
+  --transformed_data ${{outputs.transformed_data}}
+  --org_name ${{inputs.org_name}}
+  --project_name ${{inputs.project_name}}
+  --pipeline_pat ${{inputs.pipeline_pat}}
+  --azdo_pipeline_rest_version ${{inputs.azdo_pipeline_rest_version}}
+  --error_pipeline_definition_number ${{inputs.error_pipeline_definition_number}}
+  --error_pipeline_version_number ${{inputs.error_pipeline_version_number}}
+  --build_number ${{inputs.build_number}}
+  --env_selection ${{inputs.env_selection}}
+
