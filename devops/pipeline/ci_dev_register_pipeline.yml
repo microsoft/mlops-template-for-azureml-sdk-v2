@@ -26,7 +26,6 @@ stages:
   - job: CompareModelPerformanceData
     steps:
     - template: templates/configure_azureml_agent.yml
-    - template: templates/connect_to_workspace.yml
     - task: AzureCLI@2
       displayName: Compare existing and new model
       inputs: 
@@ -69,7 +68,6 @@ stages:
       inputs: 
         versionSpec: '3.8'
     - template: templates/configure_azureml_agent.yml
-    - template: templates/connect_to_workspace.yml
     - task: AzureCLI@2
       displayName: Register the Model
       inputs: 

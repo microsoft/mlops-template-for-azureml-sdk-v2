@@ -3,7 +3,7 @@ from azure.identity import DefaultAzureCredential
 import argparse
 from azure.ai.ml.entities import AmlCompute
 
-def prepare_compute(
+def get_compute(
     subscription_id: str,
     resource_group_name: str,
     workspace_name: str,
@@ -41,7 +41,7 @@ def prepare_compute(
         raise
 
 def main():
-    parser = argparse.ArgumentParser("prepare_compute")
+    parser = argparse.ArgumentParser("get_compute")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
     parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
     parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
@@ -53,7 +53,7 @@ def main():
     parser.add_argument("--idle_time_before_scale_down", type=int, default=120)
 
     args = parser.parse_args()
-    prepare_compute(
+    get_compute(
         args.subscription_id,
         args.resource_group_name,
         args.workspace_name,
