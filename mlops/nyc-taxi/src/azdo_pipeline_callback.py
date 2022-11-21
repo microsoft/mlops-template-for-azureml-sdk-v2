@@ -21,18 +21,27 @@ parser.add_argument("--register_pipeline_definition_number", type=str, help="Azu
 args = parser.parse_args()
 modelpath = args.modelpath
 
-f = open(modelpath)
-data = json.load(f)
-f.close()
+try:
+    run_file = open(modelpath)
+    model_metadata = json.load(run_file)
+except Exception as ex:
+    print(ex)
+    raise
+finally:
+    run_file.close()
+    run_id = model_metadata["run_id"]
+    run_uri = model_metadata["run_uri"]
 
-run_id = data["run_id"]
-run_uri = data["run_uri"]
-
-f = open((Path(args.score_path) / "score.json"))
-data = json.load(f)
-f.close()
-r2_score = data["r2_score"]
-mean_squared_error = data["mean_squared_error"]
+try:
+    score_file = open((Path(args.score_path) / "score.json"))
+    score_data = json.load(score_file)
+except Exception as ex:
+    print(ex)
+    raise
+finally:
+    score_file.close()
+    r2_score = score_data["r2_score"]
+    mean_squared_error = score_data["mean_squared_error"]
 
 headers = CaseInsensitiveDict()
 basic_auth_credentials = ('', args.pipeline_pat)
