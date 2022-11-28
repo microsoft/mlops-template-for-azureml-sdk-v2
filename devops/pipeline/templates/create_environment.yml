@@ -9,12 +9,10 @@ steps:
       workingDirectory: $(System.DefaultWorkingDirectory)
       scriptLocation: inlineScript
       inlineScript: |
-         python mlops/nyc-taxi/src/prep_environment.py \
+         python -m mlops.common.get_environment \
           --subscription_id $(SUBSCRIPTION_ID) \
           --resource_group_name $(RESOURCE_GROUP_NAME) \
           --workspace_name $(WORKSPACE_NAME) \
           --env_base_image_name $(ENV_BASE_IMAGE_NAME) \
           --conda_path $(CONDA_PATH) \
-          --environment_name $(ENVIRONMENT_NAME) \
-          --version_number $(BUILD.BUILDID)
-
+          --environment_name $(ENVIRONMENT_NAME)

@@ -7,7 +7,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        python mlops/nyc-taxi/src/prep_compute.py \
+        python -m mlops.common.get_compute \
         --subscription_id $(SUBSCRIPTION_ID) \
         --resource_group_name $(RESOURCE_GROUP_NAME) \
         --workspace_name $(WORKSPACE_NAME) \
