@@ -26,9 +26,6 @@ parser.add_argument("--org_name", type=str, help="The name of the Azure DevOps O
 parser.add_argument("--register_pipeline_version_number", type=str, help="Azure DevOps pipeline version to use for callback")
 parser.add_argument("--register_pipeline_definition_number", type=str, help="Azure DevOps pipeline definition number to use for callback")
 parser.add_argument("--environment_name", type=str, help="Azure Machine Learning Environment name for job execution")
-parser.add_argument("--error_pipeline_version_number", type=str, help="Azure DevOps error pipeline version to use for callback")
-parser.add_argument("--error_pipeline_definition_number", type=str, help="Azure DevOps error pipeline definition number to use for callback")
-
 
 args = parser.parse_args()
 
@@ -103,60 +100,20 @@ if args.wait_for_completion == "False":
 def nyc_taxi_data_regression(pipeline_job_input):
     prepare_sample_data = prepare_data(
         raw_data=pipeline_job_input,
-        org_name=args.org_name,
-        project_name=args.project_name,
-        pipeline_pat=args.pipeline_pat,
-        azdo_pipeline_rest_version=args.azdo_pipeline_rest_version,
-        error_pipeline_definition_number=args.error_pipeline_definition_number,
-        error_pipeline_version_number=args.error_pipeline_version_number,
-        env_selection = args.deploy_environment,
-        build_number = args.build_reference
         )
     transform_sample_data = transform_data(
         clean_data=prepare_sample_data.outputs.prep_data,
-        org_name=args.org_name,
-        project_name=args.project_name,
-        pipeline_pat=args.pipeline_pat,
-        azdo_pipeline_rest_version=args.azdo_pipeline_rest_version,
-        error_pipeline_definition_number=args.error_pipeline_definition_number,
-        error_pipeline_version_number=args.error_pipeline_version_number,
-        env_selection = args.deploy_environment,
-        build_number = args.build_reference
     )
     train_with_sample_data = train_model(
         training_data=transform_sample_data.outputs.transformed_data,
-        org_name=args.org_name,
-        project_name=args.project_name,
-        pipeline_pat=args.pipeline_pat,
-        azdo_pipeline_rest_version=args.azdo_pipeline_rest_version,
-        error_pipeline_definition_number=args.error_pipeline_definition_number,
-        error_pipeline_version_number=args.error_pipeline_version_number,
-        env_selection = args.deploy_environment,
-        build_number = args.build_reference
     )
     predict_with_sample_data = predict_result(
         model_input=train_with_sample_data.outputs.model_output,
         test_data=train_with_sample_data.outputs.test_data,
-        org_name=args.org_name,
-        project_name=args.project_name,
-        pipeline_pat=args.pipeline_pat,
-        azdo_pipeline_rest_version=args.azdo_pipeline_rest_version,
-        error_pipeline_definition_number=args.error_pipeline_definition_number,
-        error_pipeline_version_number=args.error_pipeline_version_number,
-        env_selection = args.deploy_environment,
-        build_number = args.build_reference
     )
     score_with_sample_data = score_data(
         predictions=predict_with_sample_data.outputs.predictions,
         model=train_with_sample_data.outputs.model_output,
-        org_name=args.org_name,
-        project_name=args.project_name,
-        pipeline_pat=args.pipeline_pat,
-        azdo_pipeline_rest_version=args.azdo_pipeline_rest_version,
-        error_pipeline_definition_number=args.error_pipeline_definition_number,
-        error_pipeline_version_number=args.error_pipeline_version_number,
-        env_selection = args.deploy_environment,
-        build_number = args.build_reference
     )
     if args.wait_for_completion == "False":
         callback_pipeline_with_data = callback_pipeline(

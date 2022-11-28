@@ -6,22 +6,6 @@ type: command
 inputs:
   raw_data: 
     type: uri_folder 
-  org_name:
-    type: string
-  project_name:
-    type: string
-  pipeline_pat:
-    type: string
-  azdo_pipeline_rest_version:
-    type: string
-  error_pipeline_definition_number:
-    type: string
-  error_pipeline_version_number:
-    type: string
-  env_selection:
-    type: string
-  build_number:
-    type: string
 outputs:
   prep_data:
     type: uri_folder
@@ -31,12 +15,4 @@ command: >-
   python nyc_taxi/prep_src/prep.py 
   --raw_data ${{inputs.raw_data}} 
   --prep_data ${{outputs.prep_data}}
-  --org_name ${{inputs.org_name}}
-  --project_name ${{inputs.project_name}}
-  --pipeline_pat ${{inputs.pipeline_pat}}
-  --azdo_pipeline_rest_version ${{inputs.azdo_pipeline_rest_version}}
-  --error_pipeline_definition_number ${{inputs.error_pipeline_definition_number}}
-  --error_pipeline_version_number ${{inputs.error_pipeline_version_number}}
-  --build_number ${{inputs.build_number}}
-  --env_selection ${{inputs.env_selection}}
 

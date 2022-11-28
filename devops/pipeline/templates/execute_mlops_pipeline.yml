@@ -25,6 +25,4 @@ steps:
           --org_name $(ORG_NAME)  \
           --project_name $SYSTEM_TEAMPROJECT \
           --azdo_pipeline_rest_version $(AZDO_PIPELINE_REST_VERSION)\
-          --environment_name $(ENVIRONMENT_NAME) \
-          --error_pipeline_definition_number $(ERROR_PIPELINE_DEFINITION_NUMBER) \
-          --error_pipeline_version_number $(ERROR_PIPELINE_VERSION_NUMBER) 
+          --environment_name $(ENVIRONMENT_NAME)
