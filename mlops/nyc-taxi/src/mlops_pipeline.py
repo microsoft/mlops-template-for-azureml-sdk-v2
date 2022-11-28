@@ -30,7 +30,7 @@ except Exception as ex:
    print("Oops!  invalid credentials.. Try again...")
    raise
 
-parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
+parent_dir = os.path.join(os.getcwd(), "mlops/nyc-taxi/components")
 data_dir = os.path.join(os.getcwd(), "mlops/nyc-taxi/data/")
 
 prepare_data = load_component(source=parent_dir + "/prep.yml")
