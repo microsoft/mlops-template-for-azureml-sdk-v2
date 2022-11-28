@@ -6,6 +6,7 @@ trigger:
   paths:
     include:
       - devops/*
+      - mlops/common/*
       - src/nyc_taxi/*
       - mlops/nyc-taxi/*
       - src/shared/*
@@ -31,13 +32,6 @@ stages:
       jobs:
       - job: Execute_Job_Pipeline
         steps:
-        - task: AzureKeyVault@2
-          continueOnError: false
-          inputs:
-            azureSubscription: $(AZURE_RM_SVC_CONNECTION)
-            KeyVaultName: $(keyvault_name)
-            SecretsFilter: '*'
-            RunAsPreJob: false
         - template: templates/configure_azureml_agent.yml
         - template: templates/create_compute.yml
         - template: templates/create_environment.yml
