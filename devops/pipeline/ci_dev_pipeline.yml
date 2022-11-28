@@ -32,6 +32,7 @@ stages:
       jobs:
       - job: Execute_Job_Pipeline
         steps:
+        - template: templates/get_connection_details.yml
         - template: templates/configure_azureml_agent.yml
         - template: templates/create_compute.yml
         - template: templates/create_environment.yml

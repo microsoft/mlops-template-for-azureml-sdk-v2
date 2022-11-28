@@ -1,7 +1,5 @@
 from azure.identity import DefaultAzureCredential
-import mlflow
 import argparse
-from azure.ai.ml.entities import ComputeInstance
 from azure.ai.ml.dsl import pipeline
 from azure.ai.ml import MLClient, Input, Output, command
 from azure.ai.ml import load_component
@@ -29,30 +27,16 @@ parser.add_argument("--environment_name", type=str, help="Azure Machine Learning
 
 args = parser.parse_args()
 
-client = MLClient(DefaultAzureCredential(),
-    subscription_id=args.subscription_id,
-    resource_group_name=args.resource_group_name,
-    workspace_name=args.workspace_name)
-
-azureml_mlflow_uri = client.workspaces.get(args.workspace_name).mlflow_tracking_uri
-mlflow.set_tracking_uri(azureml_mlflow_uri)
 try:
-    credential = DefaultAzureCredential()
-    credential.get_token("https://management.azure.com/.default")
-    try:
-        compute_object = client.compute.get(args.cluster_name)   
-    except:
-        compute_object = ComputeInstance(
-            name=args.cluster_name,
-            ssh_public_access_enabled=True,
-            size=args.cluster_size
-        )
-        compute_object = client.compute.begin_create_or_update(compute_object).result()
+    client = MLClient(DefaultAzureCredential(),
+        subscription_id=args.subscription_id,
+        resource_group_name=args.resource_group_name,
+        workspace_name=args.workspace_name)
 except Exception as ex:
    print("Oops!  invalid credentials.. Try again...")
    raise
 
-parent_dir = os.path.join(os.getcwd(), "src/nyc_taxi")
+parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
 data_dir = os.path.join(os.getcwd(), "mlops/nyc-taxi/data/")
 
 prepare_data = load_component(source=parent_dir + "/prep.yml")
