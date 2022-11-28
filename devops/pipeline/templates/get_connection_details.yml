@@ -1,4 +1,4 @@
-tasks:
+steps:
 - task: AzureCLI@2
   name: retrieveAzureServiceConnection
   displayName: Retrieve Azure Service Connection
