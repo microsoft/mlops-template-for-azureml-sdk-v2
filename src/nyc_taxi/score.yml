@@ -8,22 +8,6 @@ inputs:
     type: uri_folder
   model:
     type: mlflow_model
-  org_name:
-    type: string
-  project_name:
-    type: string
-  pipeline_pat:
-    type: string
-  azdo_pipeline_rest_version:
-    type: string
-  error_pipeline_definition_number:
-    type: string
-  error_pipeline_version_number:
-    type: string
-  env_selection:
-    type: string
-  build_number:
-    type: string
 outputs:
   score_report:
     type: uri_folder
@@ -34,12 +18,5 @@ command: >-
   --predictions ${{inputs.predictions}} 
   --model ${{inputs.model}} 
   --score_report ${{outputs.score_report}}
-  --org_name ${{inputs.org_name}}
-  --project_name ${{inputs.project_name}}
-  --pipeline_pat ${{inputs.pipeline_pat}}
-  --azdo_pipeline_rest_version ${{inputs.azdo_pipeline_rest_version}}
-  --error_pipeline_definition_number ${{inputs.error_pipeline_definition_number}}
-  --error_pipeline_version_number ${{inputs.error_pipeline_version_number}}
-  --build_number ${{inputs.build_number}}
-  --env_selection ${{inputs.env_selection}}
+
 
