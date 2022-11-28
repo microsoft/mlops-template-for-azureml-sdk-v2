@@ -1,7 +1,7 @@
 from azure.identity import DefaultAzureCredential
 import argparse
 from azure.ai.ml.dsl import pipeline
-from azure.ai.ml import MLClient, Input, Output, command
+from azure.ai.ml import MLClient, Input
 from azure.ai.ml import load_component
 import time
 import os
@@ -17,12 +17,6 @@ parser.add_argument("--deploy_environment", type=str, help="execution and deploy
 parser.add_argument("--experiment_name", type=str, help="Job execution experiment name")
 parser.add_argument("--ml_pipeline_name", type=str, help="name of pipeline")
 parser.add_argument("--wait_for_completion", type=str, help="determine if pipeline to wait for job completion")
-parser.add_argument("--pipeline_pat", type=str, help="pat for calling Azure DevOps Rest API authentication")
-parser.add_argument("--azdo_pipeline_rest_version", type=str, help="Azure DevOps Rest API version to use for callback")
-parser.add_argument("--project_name", type=str, help="The name of the Azure DevOps project used for callback")
-parser.add_argument("--org_name", type=str, help="The name of the Azure DevOps Organization used for callback")
-parser.add_argument("--register_pipeline_version_number", type=str, help="Azure DevOps pipeline version to use for callback")
-parser.add_argument("--register_pipeline_definition_number", type=str, help="Azure DevOps pipeline definition number to use for callback")
 parser.add_argument("--environment_name", type=str, help="Azure Machine Learning Environment name for job execution")
 
 args = parser.parse_args()
@@ -46,33 +40,11 @@ predict_result = load_component(source=parent_dir + "/predict.yml")
 score_data = load_component(source=parent_dir + "/score.yml")
 
 # Set the environment name to custom environment using name and version number
-prepare_data.environment = f"azureml:{args.environment_name}:{args.build_reference}"
-transform_data.environment = f"azureml:{args.environment_name}:{args.build_reference}"
-train_model.environment = f"azureml:{args.environment_name}:{args.build_reference}"
-predict_result.environment = f"azureml:{args.environment_name}:{args.build_reference}"
-score_data.environment = f"azureml:{args.environment_name}:{args.build_reference}"
-
-if args.wait_for_completion == "False":
-    callback_pipeline = command(
-        name="callback-azdo-pipeline",
-        display_name="Callback Azure DevOps pipeline to register model",
-        description="Callback Azure DevOps pipeline to register model",
-        command ="""python mlops/nyc-taxi/src/azdo_pipeline_callback.py 
-            --modelpath ${{inputs.model_path}} 
-            --model_folder ${{inputs.model_folder}} 
-            --score_path ${{inputs.score_path}} 
-            --buildid ${{inputs.buildid}} 
-            --pipeline_pat ${{inputs.pipeline_pat}} 
-            --azdo_pipeline_rest_version ${{inputs.azdo_pipeline_rest_version}} 
-            --project_name ${{inputs.project_name}} 
-            --org_name ${{inputs.org_name}} 
-            --register_pipeline_version_number ${{inputs.register_pipeline_version_number}} 
-            --register_pipeline_definition_number ${{inputs.register_pipeline_definition_number}}""",
-        environment=f"azureml:{args.environment_name}:{args.build_reference}",
-        inputs=dict(final_output=Input(type="uri_folder"), model_path=Input(type="uri_file"), model_folder=Input(type="mlflow_model"), score_path=Input(type="uri_folder"), buildid=args.build_reference, pipeline_pat=args.pipeline_pat, azdo_pipeline_rest_version=args.azdo_pipeline_rest_version, project_name=args.project_name, org_name=args.org_name, register_pipeline_version_number=args.register_pipeline_version_number, register_pipeline_definition_number=args.register_pipeline_definition_number ),
-        outputs=dict(output_folder=Output(type="uri_folder", mode="rw_mount")),
-        code="."
-    )
+prepare_data.environment = f"azureml:{args.environment_name}@latest"
+transform_data.environment = f"azureml:{args.environment_name}@latest"
+train_model.environment = f"azureml:{args.environment_name}@latest"
+predict_result.environment = f"azureml:{args.environment_name}@latest"
+score_data.environment = f"azureml:{args.environment_name}@latest"
 
 @pipeline(name=args.ml_pipeline_name,
     display_name=args.ml_pipeline_name, 
@@ -98,13 +70,6 @@ def nyc_taxi_data_regression(pipeline_job_input):
     score_with_sample_data = score_data(
         predictions=predict_with_sample_data.outputs.predictions,
         model=train_with_sample_data.outputs.model_output,
-    )
-    if args.wait_for_completion == "False":
-        callback_pipeline_with_data = callback_pipeline(
-            final_output=score_with_sample_data.outputs.score_report,
-            model_folder=train_with_sample_data.outputs.model_output,
-            model_path=train_with_sample_data.outputs.model_perf_data,
-            score_path = score_with_sample_data.outputs.score_report
     )
     return {
         "pipeline_job_prepped_data": prepare_sample_data.outputs.prep_data,

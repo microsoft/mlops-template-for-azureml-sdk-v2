@@ -38,6 +38,5 @@ stages:
         - template: templates/create_environment.yml
         - template: templates/execute_mlops_pipeline.yml
           parameters:
-            pipeline_pat: $(PIPELINEPAT)
             exec_environment: ${{parameters.exec_environment}}
 
