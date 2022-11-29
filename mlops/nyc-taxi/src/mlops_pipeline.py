@@ -5,7 +5,8 @@ from azure.ai.ml import MLClient, Input
 from azure.ai.ml import load_component
 import time
 import os
-from mlops.common import get_compute, get_environment
+from mlops.common.get_compute import get_compute
+from mlops.common.get_environment import get_environment
 
 
 ml_pipeline_name = ""
