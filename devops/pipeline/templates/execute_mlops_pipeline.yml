@@ -14,9 +14,14 @@ steps:
           --resource_group_name $(RESOURCE_GROUP_NAME) \
           --workspace_name $(WORKSPACE_NAME) \
           --cluster_name $(CLUSTER_NAME) \
+          --cluster_size $(CLUSTER_SIZE) \
+          --cluster_region $(CLUSTER_REGION) \
           --build_reference $(BUILD.BUILDID) \
           --deploy_environment ${{parameters.exec_environment}} \
           --experiment_name $(EXPERIMENT_NAME) \
           --ml_pipeline_name $(PIPELINE_NAME) \
+          --display_name $(DISPLAY_NAME) \
           --wait_for_completion $(WAIT_FOR_COMPLETION) \
-          --environment_name $(ENVIRONMENT_NAME)
+          --environment_name $(ENVIRONMENT_NAME) \
+          --env_base_image_name $(ENV_BASE_IMAGE_NAME) \
+          --conda_path $(CONDA_PATH)

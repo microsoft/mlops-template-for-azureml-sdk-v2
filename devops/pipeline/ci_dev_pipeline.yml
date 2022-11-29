@@ -34,9 +34,6 @@ stages:
         steps:
         - template: templates/get_connection_details.yml
         - template: templates/configure_azureml_agent.yml
-        - template: templates/create_compute.yml
-        - template: templates/create_environment.yml
         - template: templates/execute_mlops_pipeline.yml
           parameters:
             exec_environment: ${{parameters.exec_environment}}
-
