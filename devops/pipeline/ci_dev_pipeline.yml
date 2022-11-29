@@ -8,7 +8,7 @@ trigger:
       - devops/*
       - mlops/common/*
       - src/nyc_taxi/*
-      - mlops/nyc-taxi/*
+      - mlops/nyc_taxi/*
       - src/shared/*
 
 pool:

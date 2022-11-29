@@ -9,41 +9,37 @@ from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
 
 
-ml_pipeline_name = ""
-display_name = ""
-experiment_name = ""
-deploy_environment = ""
-build_reference = ""
+gl_ml_pipeline_name = ""
+gl_display_name = ""
+gl_experiment_name = ""
+gl_deploy_environment = ""
+gl_build_reference = ""
+gl_pipeline_components = []
 
-@pipeline(name=ml_pipeline_name,
-    display_name=display_name, 
-    experiment_name=experiment_name, 
+@pipeline(name=gl_ml_pipeline_name,
+    display_name=gl_display_name, 
+    experiment_name=gl_experiment_name, 
     tags={
-        'environment': deploy_environment,
-        'build_reference': build_reference 
+        'environment': gl_deploy_environment,
+        'build_reference': gl_build_reference 
     })
 def nyc_taxi_data_regression(
-    pipeline_job_input,
-    prepare_data,
-    transform_data,
-    train_model,
-    predict_result,
-    score_data
-):
-    prepare_sample_data = prepare_data(
+    pipeline_job_input
+    ):
+    prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
         )
-    transform_sample_data = transform_data(
+    transform_sample_data = gl_pipeline_components[1](
         clean_data=prepare_sample_data.outputs.prep_data,
     )
-    train_with_sample_data = train_model(
+    train_with_sample_data = gl_pipeline_components[2](
         training_data=transform_sample_data.outputs.transformed_data,
     )
-    predict_with_sample_data = predict_result(
+    predict_with_sample_data = gl_pipeline_components[3](
         model_input=train_with_sample_data.outputs.model_output,
         test_data=train_with_sample_data.outputs.test_data,
     )
-    score_with_sample_data = score_data(
+    score_with_sample_data = gl_pipeline_components[4](
         predictions=predict_with_sample_data.outputs.predictions,
         model=train_with_sample_data.outputs.model_output,
     )
@@ -60,8 +56,8 @@ def construct_pipeline(
     cluster_name: str,
     environment_name: str
 ):
-    parent_dir = os.path.join(os.getcwd(), "mlops/nyc-taxi/components")
-    data_dir = os.path.join(os.getcwd(), "mlops/nyc-taxi/data/")
+    parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
+    data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
 
     prepare_data = load_component(source=parent_dir + "/prep.yml")
     transform_data = load_component(source=parent_dir + "/transform.yml")
@@ -76,13 +72,14 @@ def construct_pipeline(
     predict_result.environment = environment_name
     score_data.environment = environment_name
 
+    gl_pipeline_components.append(prepare_data)
+    gl_pipeline_components.append(transform_data)
+    gl_pipeline_components.append(train_model)
+    gl_pipeline_components.append(predict_result)
+    gl_pipeline_components.append(score_data)
+
     pipeline_job = nyc_taxi_data_regression(
-        Input(type="uri_folder", path=data_dir),
-        prepare_data,
-        transform_data,
-        train_model,
-        predict_result,
-        score_data
+        Input(type="uri_folder", path=data_dir)
     )
 
     # demo how to change pipeline output settings
@@ -130,6 +127,67 @@ def execute_pipeline(
         print("Oops! invalid credentials or error while creating ML environment.. Try again...")
         raise
 
+def prepare_and_execute(
+    subscription_id: str,
+    resource_group_name: str,
+    workspace_name: str,
+    cluster_name: str,
+    cluster_size: str,
+    cluster_region: str,
+    min_instances: int,
+    max_instances: int,
+    idle_time_before_scale_down: int,
+    env_base_image_name: str,
+    conda_path: str,
+    environment_name: str,
+    env_description: str,
+    wait_for_completion: str,
+    ml_pipeline_name: str,
+    display_name: str,
+    experiment_name: str,
+    deploy_environment: str,
+    build_reference: str
+):
+    compute = get_compute(
+        subscription_id,
+        resource_group_name,
+        workspace_name,
+        cluster_name,
+        cluster_size,
+        cluster_region,
+        min_instances,
+        max_instances,
+        idle_time_before_scale_down
+    )
+
+    environment = get_environment(
+        subscription_id,
+        resource_group_name,
+        workspace_name,
+        env_base_image_name,
+        conda_path,
+        environment_name,
+        env_description
+    )
+
+    gl_ml_pipeline_name = ml_pipeline_name
+    gl_display_name = display_name
+    gl_experiment_name = experiment_name
+    gl_deploy_environment = deploy_environment
+    gl_build_reference = build_reference
+
+    pipeline_job = construct_pipeline(
+        compute.name,
+        environment.name
+    )
+
+    execute_pipeline(
+        subscription_id,
+        resource_group_name,
+        workspace_name,
+        experiment_name,
+        pipeline_job,
+        wait_for_completion)
 
 def main():
     parser = argparse.ArgumentParser("build_environment")
@@ -155,7 +213,7 @@ def main():
 
     args = parser.parse_args()
 
-    compute = get_compute(
+    prepare_and_execute(
         args.subscription_id,
         args.resource_group_name,
         args.workspace_name,
@@ -164,38 +222,18 @@ def main():
         args.cluster_region,
         args.min_instances,
         args.max_instances,
-        args.idle_time_before_scale_down
-    )
-
-    environment = get_environment(
-        args.subscription_id,
-        args.resource_group_name,
-        args.workspace_name,
+        args.idle_time_before_scale_down,
         args.env_base_image_name,
         args.conda_path,
         args.environment_name,
-        args.env_description
-    )
-
-    ml_pipeline_name = args.ml_pipeline_name
-    display_name = args.display_name
-    experiment_name = args.experiment_name
-    deploy_environment = args.deploy_environment
-    build_reference = args.build_reference
-
-    pipeline_job = construct_pipeline(
-        compute.name,
-        environment.name
-    )
-
-    execute_pipeline(
-        args.subscription_id,
-        args.resource_group_name,
-        args.workspace_name,
+        args.env_description,
+        args.wait_for_completion,
+        args.ml_pipeline_name,
+        args.display_name,
         args.experiment_name,
-        pipeline_job,
-        args.wait_for_completion)
-
+        args.deploy_environment,
+        args.build_reference
+    )
 
 if __name__ == "__main__":
     main()

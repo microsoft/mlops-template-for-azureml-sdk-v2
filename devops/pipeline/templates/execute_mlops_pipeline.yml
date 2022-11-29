@@ -9,7 +9,7 @@ steps:
       workingDirectory: $(System.DefaultWorkingDirectory)
       scriptLocation: inlineScript
       inlineScript: |
-         python -m mlops.nyc-taxi.src.mlops_pipeline \
+         python -m mlops.nyc_taxi.src.mlops_pipeline \
           --subscription_id $(SUBSCRIPTION_ID) \
           --resource_group_name $(RESOURCE_GROUP_NAME) \
           --workspace_name $(WORKSPACE_NAME) \
