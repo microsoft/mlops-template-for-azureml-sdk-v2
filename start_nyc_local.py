@@ -6,6 +6,7 @@ from mlops.nyc_taxi.src.mlops_pipeline import prepare_and_execute
 
 
 def main():
+    print("Loading environment variables")
     load_dotenv()
 
     subscription_id = os.environ.get("SUBSCRIPTION_ID")
@@ -50,6 +51,7 @@ def main():
         env_base_image_name,
         conda_path,
         environment_name,
+        "my test environment",
         wait_for_completion,
         pipeline_name,
         display_name,
@@ -57,3 +59,7 @@ def main():
         deploy_environment,
         build_id
     )
+
+
+if __name__ == "__main__":
+    main()

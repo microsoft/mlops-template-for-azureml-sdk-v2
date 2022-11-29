@@ -176,9 +176,11 @@ def prepare_and_execute(
     gl_deploy_environment = deploy_environment
     gl_build_reference = build_reference
 
+    print(f"Environment: {environment.name}, version: {environment.version}")
+
     pipeline_job = construct_pipeline(
         compute.name,
-        environment.name
+        f"azureml:{environment.name}:{environment.version}"
     )
 
     execute_pipeline(
