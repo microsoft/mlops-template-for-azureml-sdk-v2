@@ -9,20 +9,19 @@ steps:
       workingDirectory: $(System.DefaultWorkingDirectory)
       scriptLocation: inlineScript
       inlineScript: |
-         python mlops/nyc-taxi/src/mlops_pipeline.py \
+         python -m mlops.nyc_taxi.src.mlops_pipeline \
           --subscription_id $(SUBSCRIPTION_ID) \
           --resource_group_name $(RESOURCE_GROUP_NAME) \
           --workspace_name $(WORKSPACE_NAME) \
           --cluster_name $(CLUSTER_NAME) \
+          --cluster_size $(CLUSTER_SIZE) \
+          --cluster_region $(CLUSTER_REGION) \
           --build_reference $(BUILD.BUILDID) \
           --deploy_environment ${{parameters.exec_environment}} \
           --experiment_name $(EXPERIMENT_NAME) \
           --ml_pipeline_name $(PIPELINE_NAME) \
+          --display_name $(DISPLAY_NAME) \
           --wait_for_completion $(WAIT_FOR_COMPLETION) \
-          --pipeline_pat ${{parameters.PIPELINE_PAT}} \
-          --register_pipeline_definition_number $(REGISTER_PIPELINE_DEFINITION_NUMBER) \
-          --register_pipeline_version_number $(REGISTER_PIPELINE_VERSION_NUMBER) \
-          --org_name $(ORG_NAME)  \
-          --project_name $SYSTEM_TEAMPROJECT \
-          --azdo_pipeline_rest_version $(AZDO_PIPELINE_REST_VERSION)\
-          --environment_name $(ENVIRONMENT_NAME)
+          --environment_name $(ENVIRONMENT_NAME) \
+          --env_base_image_name $(ENV_BASE_IMAGE_NAME) \
+          --conda_path $(CONDA_PATH)

@@ -34,7 +34,7 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           MODEL_TO_COMPARE=$(printf "%s_%s" $(model_name) ${{parameters.envSelection}})
-          python mlops/nyc-taxi/src/compare_models.py \
+          python mlops/nyc_taxi/src/compare_models.py \
             --subscription_id $(SUBSCRIPTION_ID) \
             --resource_group_name  $(RESOURCE_GROUP_NAME) \
             --workspace_name $(WORKSPACE_NAME)  \
@@ -76,7 +76,7 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           MODEL_NAME_TO_REGISTER=$(printf "%s_%s" $(model_name) ${{parameters.envSelection}})
-          python mlops/nyc-taxi/src/register_model.py \
+          python mlops/nyc_taxi/src/register_model.py \
             --subscription_id $(SUBSCRIPTION_ID) \
             --resource_group_name  $(RESOURCE_GROUP_NAME) \
             --workspace_name $(WORKSPACE_NAME)  \

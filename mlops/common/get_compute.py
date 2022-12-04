@@ -14,6 +14,7 @@ def get_compute(
     max_instances: int,
     idle_time_before_scale_down: int
 ):
+    compute_object = None
     try:
         client = MLClient(DefaultAzureCredential(),
             subscription_id=subscription_id,
@@ -35,10 +36,10 @@ def get_compute(
             )
             compute_object = client.compute.begin_create_or_update(compute_object).result()
             print(f"A new cluster {cluster_name} has been created.")
-            return compute_object
     except Exception as ex:
         print("Oops!  invalid credentials.. Try again...")
         raise
+    return compute_object
 
 def main():
     parser = argparse.ArgumentParser("get_compute")

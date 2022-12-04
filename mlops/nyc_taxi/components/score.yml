@@ -12,9 +12,9 @@ outputs:
   score_report:
     type: uri_folder
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
-code: ./../
+code: ./../../../
 command: >-
-  python nyc_taxi/score_src/score.py 
+  python -m src.nyc_taxi.score_src.score 
   --predictions ${{inputs.predictions}} 
   --model ${{inputs.model}} 
   --score_report ${{outputs.score_report}}

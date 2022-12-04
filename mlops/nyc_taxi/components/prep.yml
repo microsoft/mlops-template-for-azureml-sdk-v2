@@ -9,10 +9,10 @@ inputs:
 outputs:
   prep_data:
     type: uri_folder
-code: ./../
+code: ./../../../
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
 command: >-
-  python nyc_taxi/prep_src/prep.py 
+  python -m src.nyc_taxi.prep_src.prep 
   --raw_data ${{inputs.raw_data}} 
   --prep_data ${{outputs.prep_data}}
 

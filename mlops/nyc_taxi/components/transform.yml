@@ -9,10 +9,10 @@ inputs:
 outputs:
   transformed_data:
     type: uri_folder
-code: ./../
+code: ./../../../
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
 command: >-
-  python nyc_taxi/transform_src/transform.py 
+  python -m src.nyc_taxi.transform_src.transform
   --clean_data ${{inputs.clean_data}} 
   --transformed_data ${{outputs.transformed_data}}
 
