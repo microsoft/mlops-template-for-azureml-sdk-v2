@@ -9,20 +9,9 @@ from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
 
 
-gl_display_name = ""
-gl_experiment_name = ""
-gl_deploy_environment = ""
-gl_build_reference = ""
 gl_pipeline_components = []
 
-@pipeline(
-    name='aaa',
-    display_name='aaa',
-    experiment_name=gl_experiment_name, 
-    tags={
-        'environment': gl_deploy_environment,
-        'build_reference': gl_build_reference 
-    })
+@pipeline()
 def nyc_taxi_data_regression(
     pipeline_job_input
     ):
@@ -54,7 +43,10 @@ def nyc_taxi_data_regression(
 
 def construct_pipeline(
     cluster_name: str,
-    environment_name: str
+    environment_name: str,
+    display_name: str,
+    deploy_environment: str,
+    build_reference: str
 ):
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
     data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
@@ -81,7 +73,11 @@ def construct_pipeline(
     pipeline_job = nyc_taxi_data_regression(
         Input(type="uri_folder", path=data_dir)
     )
-    pipeline_job.display_name="hhh"
+    pipeline_job.display_name=display_name
+    pipeline_job.tags={
+        'environment': deploy_environment,
+        'build_reference': build_reference 
+    }
 
     # demo how to change pipeline output settings
     pipeline_job.outputs.pipeline_job_prepped_data.mode = "rw_mount"
@@ -110,7 +106,7 @@ def execute_pipeline(
             workspace_name=workspace_name)
 
         pipeline_job = client.jobs.create_or_update(
-            pipeline_job
+            pipeline_job, experiment_name=experiment_name
         )
 
         print("The job has been submitted!")
@@ -172,16 +168,14 @@ def prepare_and_execute(
         env_description
     )
 
-    gl_display_name = display_name
-    gl_experiment_name = experiment_name
-    gl_deploy_environment = deploy_environment
-    gl_build_reference = build_reference
-
     print(f"Environment: {environment.name}, version: {environment.version}")
 
     pipeline_job = construct_pipeline(
         compute.name,
-        f"azureml:{environment.name}:{environment.version}"
+        f"azureml:{environment.name}:{environment.version}",
+        display_name,
+        deploy_environment,
+        build_reference
     )
 
     execute_pipeline(

@@ -19,7 +19,6 @@ def main():
     deploy_environment = os.environ.get("DEPLOY_ENVIRONMENT")
     experiment_base_name = os.environ.get("EXPERIMENT_BASE_NAME")
     display_base_name = os.environ.get("DISPLAY_BASE_NAME")
-    pipeline_base_name = os.environ.get("PIPELINE_BASE_NAME")
     wait_for_completion = os.environ.get("WAIT_FOR_COMPLETION")
     environment_name = os.environ.get("ENVIRONMENT_NAME")
     env_base_image_name = os.environ.get("ENV_BASE_IMAGE_NAME")
