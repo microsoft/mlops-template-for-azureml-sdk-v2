@@ -1,7 +1,7 @@
 variables:
 - name: EXPERIMENT_NAME
-  value: $(EXPERIMENT_BASE_NAME)_${{parameters.exec_environment}}__$(Build.SourceBranchName)
+  value: $(EXPERIMENT_BASE_NAME)_${{parameters.exec_environment}}_$(Build.SourceBranchName)
 - name: DISPLAY_NAME
   value: $(DISPLAY_BASE_NAME)_${{parameters.exec_environment}}_$(Build.BuildID)
 - name: MODEL_NAME
-  value: $(MODEL_BASE_NAME)_${{parameters.exec_environment}}__$(Build.SourceBranchName)
+  value: $(MODEL_BASE_NAME)_${{parameters.exec_environment}}_$(Build.SourceBranchName)

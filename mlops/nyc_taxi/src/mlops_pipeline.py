@@ -16,6 +16,7 @@ gl_build_reference = ""
 gl_pipeline_components = []
 
 @pipeline(
+    name=gl_display_name,
     display_name=gl_display_name, 
     experiment_name=gl_experiment_name, 
     tags={
