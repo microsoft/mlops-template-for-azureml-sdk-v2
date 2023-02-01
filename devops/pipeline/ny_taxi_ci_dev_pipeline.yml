@@ -21,6 +21,8 @@ parameters:
 
 variables:
 - group: MLOps-${{parameters.exec_environment}}-VG
+- name: PIPELINE_TYPE
+  value: nyc
 
 stages:
     - stage: execute
