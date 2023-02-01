@@ -1,3 +1,6 @@
+parameters:
+  - name: script_parameter
+    type: string
 
 steps:
   - task: AzureCLI@2
@@ -8,4 +11,4 @@ steps:
       scriptType: bash
       workingDirectory: $(System.DefaultWorkingDirectory)
       scriptLocation: inlineScript
-      inlineScript: ${{parameters.exec_environment}}
+      inlineScript: ${{parameters.script_parameter}}
