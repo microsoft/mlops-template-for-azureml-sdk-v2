@@ -16,6 +16,8 @@ gl_build_reference = ""
 gl_pipeline_components = []
 
 @pipeline(
+    name='aaa',
+    display_name='aaa',
     experiment_name=gl_experiment_name, 
     tags={
         'environment': gl_deploy_environment,
@@ -79,7 +81,7 @@ def construct_pipeline(
     pipeline_job = nyc_taxi_data_regression(
         Input(type="uri_folder", path=data_dir)
     )
-    pipeline_job.display_name=gl_display_name
+    pipeline_job.display_name="hhh"
 
     # demo how to change pipeline output settings
     pipeline_job.outputs.pipeline_job_prepped_data.mode = "rw_mount"
@@ -108,8 +110,10 @@ def execute_pipeline(
             workspace_name=workspace_name)
 
         pipeline_job = client.jobs.create_or_update(
-            pipeline_job, experiment_name=experiment_name 
+            pipeline_job
         )
+
+        print("The job has been submitted!")
     
         if wait_for_completion == "True":
             job_status = ["NotStarted", "Queued", "Starting", "Preparing", "Running", "Finalizing"]
@@ -117,11 +121,11 @@ def execute_pipeline(
                 time.sleep(15)
                 pipeline_job = client.jobs.get(pipeline_job.name) 
                 print(pipeline_job.status)
-        if pipeline_job.status == 'Completed' or pipeline_job.status == 'Finished':
-            print(f"job status: {pipeline_job.status}")
-            print("exiting job successfully..")
-        else:
-            raise Exception("Exiting job with failure...")
+            if pipeline_job.status == 'Completed' or pipeline_job.status == 'Finished':
+                print(f"job status: {pipeline_job.status}")
+                print("exiting job successfully..")
+            else:
+                raise Exception("Exiting job with failure...")
     except Exception as ex:
         print("Oops! invalid credentials or error while creating ML environment.. Try again...")
         raise
