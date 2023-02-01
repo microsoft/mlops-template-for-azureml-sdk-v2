@@ -16,8 +16,6 @@ gl_build_reference = ""
 gl_pipeline_components = []
 
 @pipeline(
-    name=gl_display_name,
-    display_name=gl_display_name, 
     experiment_name=gl_experiment_name, 
     tags={
         'environment': gl_deploy_environment,
@@ -81,6 +79,7 @@ def construct_pipeline(
     pipeline_job = nyc_taxi_data_regression(
         Input(type="uri_folder", path=data_dir)
     )
+    pipeline_job.display_name=gl_display_name
 
     # demo how to change pipeline output settings
     pipeline_job.outputs.pipeline_job_prepped_data.mode = "rw_mount"
@@ -122,7 +121,7 @@ def execute_pipeline(
             print(f"job status: {pipeline_job.status}")
             print("exiting job successfully..")
         else:
-            print("exiting job with failure..")
+            raise Exception("Exiting job with failure...")
     except Exception as ex:
         print("Oops! invalid credentials or error while creating ML environment.. Try again...")
         raise
