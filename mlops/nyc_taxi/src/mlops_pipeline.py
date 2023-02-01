@@ -9,14 +9,13 @@ from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
 
 
-gl_ml_pipeline_name = ""
 gl_display_name = ""
 gl_experiment_name = ""
 gl_deploy_environment = ""
 gl_build_reference = ""
 gl_pipeline_components = []
 
-@pipeline(name=gl_ml_pipeline_name,
+@pipeline(
     display_name=gl_display_name, 
     experiment_name=gl_experiment_name, 
     tags={
@@ -142,7 +141,6 @@ def prepare_and_execute(
     environment_name: str,
     env_description: str,
     wait_for_completion: str,
-    ml_pipeline_name: str,
     display_name: str,
     experiment_name: str,
     deploy_environment: str,
@@ -170,7 +168,6 @@ def prepare_and_execute(
         env_description
     )
 
-    gl_ml_pipeline_name = ml_pipeline_name
     gl_display_name = display_name
     gl_experiment_name = experiment_name
     gl_deploy_environment = deploy_environment
@@ -206,7 +203,6 @@ def main():
     parser.add_argument("--deploy_environment", type=str, help="execution and deployment environment. e.g. dev, prod, test")
     parser.add_argument("--experiment_name", type=str, help="Job execution experiment name")
     parser.add_argument("--display_name", type=str, help="Job execution run name")
-    parser.add_argument("--ml_pipeline_name", type=str, help="name of pipeline")
     parser.add_argument("--wait_for_completion", type=str, help="determine if pipeline to wait for job completion")
     parser.add_argument("--environment_name", type=str, help="Azure Machine Learning Environment name for job execution")
     parser.add_argument("--env_base_image_name", type=str, help="Environment custom base image name")
@@ -230,7 +226,6 @@ def main():
         args.environment_name,
         args.env_description,
         args.wait_for_completion,
-        args.ml_pipeline_name,
         args.display_name,
         args.experiment_name,
         args.deploy_environment,

@@ -5,5 +5,3 @@ variables:
   value: $(DISPLAY_BASE_NAME)_${{parameters.exec_environment}}_$(Build.BuildID)
 - name: MODEL_NAME
   value: $(MODEL_BASE_NAME)_${{parameters.exec_environment}}_$(Build.BuildID)
-- name: PIPELINE_NAME
-  value: $(pipeline_base_name)_${{parameters.exec_environment}}_$(Build.BuildID)

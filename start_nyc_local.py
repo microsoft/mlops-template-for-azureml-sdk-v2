@@ -33,7 +33,6 @@ def main():
     git_branch = git_branch_items[len(git_branch_items) - 1]
 
     experiment_name = f"nyc_{experiment_base_name}_{git_branch}"
-    pipeline_name = f"nyc_{pipeline_base_name}_{git_branch}"
     display_name = f"nyc_{display_base_name}_{uuid.uuid4().hex}"
 
     print("Start pipeline creation")
@@ -53,7 +52,6 @@ def main():
         environment_name,
         "my test environment",
         wait_for_completion,
-        pipeline_name,
         display_name,
         experiment_name,
         deploy_environment,
