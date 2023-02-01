@@ -1,3 +1,7 @@
+"""
+It should be executed as a module from a working folder
+example: python -m mlops.nyc_taxi.start_nyc_local
+"""
 from dotenv import load_dotenv
 import subprocess
 import os
