@@ -23,6 +23,11 @@ variables:
 - group: MLOps-${{parameters.exec_environment}}-VG
 
 stages:
+    - stage: build
+      displayName: build_validation
+      jobs:
+        - template: build_validation_pipeline.yml
+        
     - stage: execute
       displayName: execute_job
       variables:
