@@ -7,7 +7,7 @@ inputs:
   predictions:
     type: uri_folder
   model:
-    type: mlflow_model
+    type: uri_folder
 outputs:
   score_report:
     type: uri_folder

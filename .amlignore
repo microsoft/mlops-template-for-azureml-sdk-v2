@@ -1,0 +1,16 @@
+# Use this folder to ignore all files and folders that should not go
+# to Azure ML Service
+
+# Allow amlignore file
+!.amlignore
+
+# Folders
+devops/
+docs/
+test
+mlops/
+.git/
+
+# Files
+README.md
+setup.cfg

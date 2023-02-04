@@ -8,9 +8,7 @@ inputs:
     type: uri_folder
 outputs:
   model_output:
-    type: mlflow_model
-  model_perf_data:
-    type: uri_file
+    type: uri_folder
   test_data:
     type: uri_folder
 code: ./../../../
@@ -20,5 +18,4 @@ command: >-
   --training_data ${{inputs.training_data}} 
   --test_data ${{outputs.test_data}} 
   --model_output ${{outputs.model_output}}
-  --model_perf_data ${{outputs.model_perf_data}}
 
