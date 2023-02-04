@@ -7,7 +7,7 @@ pr:
       - devops/*
       - mlops/common/*
       - src/nyc_taxi/*
-      - mlops/nyc_taxi/*
+      - mlops/nyc_src/*
       - src/shared/*
 trigger: none
 

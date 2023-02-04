@@ -7,7 +7,7 @@ trigger:
     include:
       - devops/*
       - mlops/common/*
-      - src/nyc_taxi/*
+      - src/nyc_src/*
       - mlops/nyc_taxi/*
       - src/shared/*
 
