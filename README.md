@@ -1,4 +1,4 @@
-# MLOps Basic Template for Azure ML CLI v2
+# MLOps Template for Azure ML SDK v2
 
 > **Note:**
 > This is a repo that can be shared to our customers. This means it's NOT OK to include Microsoft confidential
@@ -6,7 +6,7 @@
 
 ## About this repo
 
-The idea of this template is to provide a minimum number of scripts to implement development environment to train new models using Azure ML CLI v2 and Azure DevOps.
+The idea of this template is to provide a minimum number of scripts to implement development environment to train new models using Azure ML SDK v2 and Azure DevOps.
 
 The template contains the following folders/files:
 
