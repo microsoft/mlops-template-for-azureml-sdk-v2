@@ -4,7 +4,7 @@ jobs:
   timeoutInMinutes: 0
   dependsOn: Execute_Job_Pipeline
   variables: 
-    run_name_from_submit_job: $[ dependencies.Execute_Job_Pipeline.outputs['submit_aml_job_task.RUN_NAME'] ] 
+    run_name_from_submit_job: $[ dependencies.Execute_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ] 
   steps:
   - task: AzureMLJobWaitTask@0
     inputs:

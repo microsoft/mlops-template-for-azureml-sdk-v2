@@ -58,6 +58,7 @@ stages:
 
         - task: AzureCLI@2
           displayName: Read Run ID
+          name: read_run_id
           inputs:
             azureSubscription: $(AZURE_RM_SVC_CONNECTION)
             scriptType: bash
