@@ -4,6 +4,7 @@ parameters:
 
 steps:
   - task: AzureCLI@2
+    name: submit_aml_job_task
     displayName: Execute Azure ML pipeline job
     continueOnError: false
     inputs: 

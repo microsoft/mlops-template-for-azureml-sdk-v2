@@ -1,0 +1,13 @@
+jobs:
+- job: WaitForCallback
+  pool: server
+  timeoutInMinutes: 0
+  dependsOn: Execute_Job_Pipeline
+  variables: 
+    run_name_from_submit_job: $[ dependencies.Execute_Job_Pipeline.outputs['submit_aml_job_task.RUN_NAME'] ] 
+  steps:
+  - task: AzureMLJobWaitTask@0
+    inputs:
+      # a service connection with Azure ML scope (see the doc from the link above)
+      serviceConnection: $(ML_SCOPE_SVC_CONNECTION)
+      azureMLJobName: $(run_name_from_submit_job)

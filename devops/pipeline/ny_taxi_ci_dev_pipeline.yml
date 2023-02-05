@@ -54,3 +54,9 @@ stages:
                 --environment_name $(ENVIRONMENT_NAME) \
                 --env_base_image_name $(ENV_BASE_IMAGE_NAME) \
                 --conda_path $(CONDA_PATH)
+
+      # Async job wait for results
+      # This is a early preview feature and it can be changed prior GA
+      # https://github.com/Azure/azure-mlops-automation for details or get access
+
+      - template: templates/wait_with_extension_job.yml
