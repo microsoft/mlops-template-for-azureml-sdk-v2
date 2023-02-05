@@ -12,4 +12,5 @@ steps:
       scriptType: bash
       workingDirectory: $(System.DefaultWorkingDirectory)
       scriptLocation: inlineScript
-      inlineScript: ${{parameters.script_parameter}}
+      inlineScript: |
+        ${{parameters.script_parameter}}

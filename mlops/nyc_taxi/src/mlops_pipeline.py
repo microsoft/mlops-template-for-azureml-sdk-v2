@@ -96,7 +96,8 @@ def execute_pipeline(
     workspace_name: str,
     experiment_name: str,
     pipeline_job: pipeline,
-    wait_for_completion: str
+    wait_for_completion: str,
+    output_file: str
 ):
     try:
         client = MLClient(
@@ -109,7 +110,10 @@ def execute_pipeline(
             pipeline_job, experiment_name=experiment_name
         )
 
-        print("The job has been submitted!")
+        print(f"The job {pipeline_job.name} has been submitted!")
+        if (output_file is not None):
+            with open(output_file, "w") as out_file:
+                out_file.write(pipeline_job.name)
     
         if wait_for_completion == "True":
             job_status = ["NotStarted", "Queued", "Starting", "Preparing", "Running", "Finalizing"]
@@ -144,7 +148,8 @@ def prepare_and_execute(
     display_name: str,
     experiment_name: str,
     deploy_environment: str,
-    build_reference: str
+    build_reference: str,
+    output_file: str
 ):
     compute = get_compute(
         subscription_id,
@@ -184,7 +189,8 @@ def prepare_and_execute(
         workspace_name,
         experiment_name,
         pipeline_job,
-        wait_for_completion)
+        wait_for_completion,
+        output_file)
 
 def main():
     parser = argparse.ArgumentParser("build_environment")
@@ -206,6 +212,7 @@ def main():
     parser.add_argument("--env_base_image_name", type=str, help="Environment custom base image name")
     parser.add_argument("--conda_path", type=str, help="path to conda requirements file")
     parser.add_argument("--env_description", type=str, default="Environment created using Conda.")
+    parser.add_argument("--output_file", type=str, required=False, help="A file to save run id")
 
     args = parser.parse_args()
 
@@ -227,7 +234,8 @@ def main():
         args.display_name,
         args.experiment_name,
         args.deploy_environment,
-        args.build_reference
+        args.build_reference,
+        args.output_file
     )
 
 if __name__ == "__main__":
