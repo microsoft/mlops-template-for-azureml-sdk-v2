@@ -8,17 +8,14 @@ inputs:
     type: uri_folder
 outputs:
   model_output:
-    type: mlflow_model
-  model_perf_data:
-    type: uri_file
+    type: uri_folder
   test_data:
     type: uri_folder
 code: ./../../../
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
 command: >-
-  python -m src.nyc_taxi.train_src.train
+  python -m src.nyc_src.train.train
   --training_data ${{inputs.training_data}} 
   --test_data ${{outputs.test_data}} 
   --model_output ${{outputs.model_output}}
-  --model_perf_data ${{outputs.model_perf_data}}
 

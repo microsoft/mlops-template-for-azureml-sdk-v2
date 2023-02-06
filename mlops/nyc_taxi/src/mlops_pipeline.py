@@ -9,20 +9,9 @@ from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
 
 
-gl_ml_pipeline_name = ""
-gl_display_name = ""
-gl_experiment_name = ""
-gl_deploy_environment = ""
-gl_build_reference = ""
 gl_pipeline_components = []
 
-@pipeline(name=gl_ml_pipeline_name,
-    display_name=gl_display_name, 
-    experiment_name=gl_experiment_name, 
-    tags={
-        'environment': gl_deploy_environment,
-        'build_reference': gl_build_reference 
-    })
+@pipeline()
 def nyc_taxi_data_regression(
     pipeline_job_input
     ):
@@ -54,7 +43,10 @@ def nyc_taxi_data_regression(
 
 def construct_pipeline(
     cluster_name: str,
-    environment_name: str
+    environment_name: str,
+    display_name: str,
+    deploy_environment: str,
+    build_reference: str
 ):
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
     data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
@@ -81,6 +73,11 @@ def construct_pipeline(
     pipeline_job = nyc_taxi_data_regression(
         Input(type="uri_folder", path=data_dir)
     )
+    pipeline_job.display_name=display_name
+    pipeline_job.tags={
+        'environment': deploy_environment,
+        'build_reference': build_reference 
+    }
 
     # demo how to change pipeline output settings
     pipeline_job.outputs.pipeline_job_prepped_data.mode = "rw_mount"
@@ -99,7 +96,8 @@ def execute_pipeline(
     workspace_name: str,
     experiment_name: str,
     pipeline_job: pipeline,
-    wait_for_completion: str
+    wait_for_completion: str,
+    output_file: str
 ):
     try:
         client = MLClient(
@@ -109,8 +107,13 @@ def execute_pipeline(
             workspace_name=workspace_name)
 
         pipeline_job = client.jobs.create_or_update(
-            pipeline_job, experiment_name=experiment_name 
+            pipeline_job, experiment_name=experiment_name
         )
+
+        print(f"The job {pipeline_job.name} has been submitted!")
+        if (output_file is not None):
+            with open(output_file, "w") as out_file:
+                out_file.write(pipeline_job.name)
     
         if wait_for_completion == "True":
             job_status = ["NotStarted", "Queued", "Starting", "Preparing", "Running", "Finalizing"]
@@ -118,11 +121,11 @@ def execute_pipeline(
                 time.sleep(15)
                 pipeline_job = client.jobs.get(pipeline_job.name) 
                 print(pipeline_job.status)
-        if pipeline_job.status == 'Completed' or pipeline_job.status == 'Finished':
-            print(f"job status: {pipeline_job.status}")
-            print("exiting job successfully..")
-        else:
-            print("exiting job with failure..")
+            if pipeline_job.status == 'Completed' or pipeline_job.status == 'Finished':
+                print(f"job status: {pipeline_job.status}")
+                print("exiting job successfully..")
+            else:
+                raise Exception("Exiting job with failure...")
     except Exception as ex:
         print("Oops! invalid credentials or error while creating ML environment.. Try again...")
         raise
@@ -142,11 +145,11 @@ def prepare_and_execute(
     environment_name: str,
     env_description: str,
     wait_for_completion: str,
-    ml_pipeline_name: str,
     display_name: str,
     experiment_name: str,
     deploy_environment: str,
-    build_reference: str
+    build_reference: str,
+    output_file: str
 ):
     compute = get_compute(
         subscription_id,
@@ -170,17 +173,14 @@ def prepare_and_execute(
         env_description
     )
 
-    gl_ml_pipeline_name = ml_pipeline_name
-    gl_display_name = display_name
-    gl_experiment_name = experiment_name
-    gl_deploy_environment = deploy_environment
-    gl_build_reference = build_reference
-
     print(f"Environment: {environment.name}, version: {environment.version}")
 
     pipeline_job = construct_pipeline(
         compute.name,
-        f"azureml:{environment.name}:{environment.version}"
+        f"azureml:{environment.name}:{environment.version}",
+        display_name,
+        deploy_environment,
+        build_reference
     )
 
     execute_pipeline(
@@ -189,7 +189,8 @@ def prepare_and_execute(
         workspace_name,
         experiment_name,
         pipeline_job,
-        wait_for_completion)
+        wait_for_completion,
+        output_file)
 
 def main():
     parser = argparse.ArgumentParser("build_environment")
@@ -206,12 +207,12 @@ def main():
     parser.add_argument("--deploy_environment", type=str, help="execution and deployment environment. e.g. dev, prod, test")
     parser.add_argument("--experiment_name", type=str, help="Job execution experiment name")
     parser.add_argument("--display_name", type=str, help="Job execution run name")
-    parser.add_argument("--ml_pipeline_name", type=str, help="name of pipeline")
     parser.add_argument("--wait_for_completion", type=str, help="determine if pipeline to wait for job completion")
     parser.add_argument("--environment_name", type=str, help="Azure Machine Learning Environment name for job execution")
     parser.add_argument("--env_base_image_name", type=str, help="Environment custom base image name")
     parser.add_argument("--conda_path", type=str, help="path to conda requirements file")
     parser.add_argument("--env_description", type=str, default="Environment created using Conda.")
+    parser.add_argument("--output_file", type=str, required=False, help="A file to save run id")
 
     args = parser.parse_args()
 
@@ -230,11 +231,11 @@ def main():
         args.environment_name,
         args.env_description,
         args.wait_for_completion,
-        args.ml_pipeline_name,
         args.display_name,
         args.experiment_name,
         args.deploy_environment,
-        args.build_reference
+        args.build_reference,
+        args.output_file
     )
 
 if __name__ == "__main__":

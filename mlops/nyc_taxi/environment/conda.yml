@@ -10,5 +10,5 @@ dependencies:
     - mlflow
     - azureml-mlflow
     - mldesigner==0.1.0b4
-    - azure-ai-ml==1.0.0
+    - azure-ai-ml==1.3.0
     - azure-identity==1.11.0

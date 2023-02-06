@@ -7,14 +7,14 @@ inputs:
   predictions:
     type: uri_folder
   model:
-    type: mlflow_model
+    type: uri_folder
 outputs:
   score_report:
     type: uri_folder
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
 code: ./../../../
 command: >-
-  python -m src.nyc_taxi.score_src.score 
+  python -m src.nyc_src.score.score 
   --predictions ${{inputs.predictions}} 
   --model ${{inputs.model}} 
   --score_report ${{outputs.score_report}}

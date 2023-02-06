@@ -1,3 +1,7 @@
+"""
+It should be executed as a module from a working folder
+example: python -m mlops.nyc_taxi.start_nyc_local
+"""
 from dotenv import load_dotenv
 import subprocess
 import os
@@ -19,7 +23,6 @@ def main():
     deploy_environment = os.environ.get("DEPLOY_ENVIRONMENT")
     experiment_base_name = os.environ.get("EXPERIMENT_BASE_NAME")
     display_base_name = os.environ.get("DISPLAY_BASE_NAME")
-    pipeline_base_name = os.environ.get("PIPELINE_BASE_NAME")
     wait_for_completion = os.environ.get("WAIT_FOR_COMPLETION")
     environment_name = os.environ.get("ENVIRONMENT_NAME")
     env_base_image_name = os.environ.get("ENV_BASE_IMAGE_NAME")
@@ -33,7 +36,6 @@ def main():
     git_branch = git_branch_items[len(git_branch_items) - 1]
 
     experiment_name = f"nyc_{experiment_base_name}_{git_branch}"
-    pipeline_name = f"nyc_{pipeline_base_name}_{git_branch}"
     display_name = f"nyc_{display_base_name}_{uuid.uuid4().hex}"
 
     print("Start pipeline creation")
@@ -53,11 +55,11 @@ def main():
         environment_name,
         "my test environment",
         wait_for_completion,
-        pipeline_name,
         display_name,
         experiment_name,
         deploy_environment,
-        build_id
+        build_id,
+        None
     )
 
 
