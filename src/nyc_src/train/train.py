@@ -11,6 +11,7 @@ import pickle
 import mlflow
 import mlflow.pyfunc
 import json
+import time
 
 
 def main(training_data, test_data, model_output):
@@ -85,7 +86,7 @@ def split(train_data):
 def train_model(trainX, trainy):
     
 
-
+    mlflow.sklearn.autolog()
         # Train a Linear Regression Model with the train set
     model = LinearRegression().fit(trainX, trainy)
     print(model.score(trainX, trainy))
@@ -96,7 +97,8 @@ def train_model(trainX, trainy):
         #print(mlflow.active_run().info.run_id)
         #mlflow.register_model("runs:/" + mlflow.active_run().info.run_id + "/" + args.model_output, "dummy_model")
         #model_info = mlflow.sklearn.log_model(model, model_output)
-    mlflow.register_model(model_info.model_uri, "mymodel1")
+    time.sleep(300)
+    mlflow.register_model(model_info.model_uri, "mymodel2")
 
         #mlflow.lightgbm.save_model(full_model, model_path)
 
