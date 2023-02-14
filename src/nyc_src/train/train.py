@@ -1,17 +1,12 @@
 import argparse
-from asyncore import write
 from pathlib import Path
-from uuid import uuid4
-from datetime import datetime
 import os
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import pickle
 import mlflow
-import mlflow.pyfunc
-import json
-import time
+
 
 
 def main(training_data, test_data, model_output, model_metadata):
@@ -85,26 +80,13 @@ def split(train_data):
 
 
 def train_model(trainX, trainy):
-    
-
-
-        # Train a Linear Regression Model with the train set
+    mlflow.autolog()
+    # Train a Linear Regression Model with the train set
     model = LinearRegression().fit(trainX, trainy)
     print(model.score(trainX, trainy))
 
-        # Output the model and test data
-        #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-    model_info = mlflow.sklearn.log_model(model,"model_folder")
-    model_data = {"run_id": model_info.run_id, "run_uri": model_info.model_uri}
-    with open(args.model_metadata, "w") as json_file:
-        json.dump(model_data, json_file, indent=4)
-        #print(mlflow.active_run().info.run_id)
-        #mlflow.register_model("runs:/" + mlflow.active_run().info.run_id + "/" + args.model_output, "dummy_model")
-        #model_info = mlflow.sklearn.log_model(model, model_output)
-    #time.sleep(300)
-    #mlflow.register_model(model_info.model_uri, "mymodel2")
-
-        #mlflow.lightgbm.save_model(full_model, model_path)
+    # Output the model and test data
+    pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
 
 def write_test_data(testX, testy):
     # test_data = pd.DataFrame(testX, columns = )
