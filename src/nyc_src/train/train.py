@@ -9,13 +9,14 @@ import mlflow
 
 
 
-def main(training_data, test_data, model_output):
+def main(training_data, test_data, model_output,model_metadata):
     print("Hello training world...")
 
     lines = [
         f"Training data path: {training_data}",
         f"Test data path: {test_data}",
         f"Model output path: {model_output}",
+        f"Model output path: {model_metadata}",
     ]
 
     for line in lines:
@@ -81,12 +82,19 @@ def split(train_data):
 def train_model(trainX, trainy):
     mlflow.autolog()
     # Train a Linear Regression Model with the train set
-    with mlflow.start_run(run_name="YOUR_RUN_NAME") as run:
+    with mlflow.start_run() as run:
         model = LinearRegression().fit(trainX, trainy)
         print(model.score(trainX, trainy))
         print(mlflow.active_run().info.run_id)
+        print(run.info.run_id)
+        print(run.info.artifact_uri)
+        print(run.info.experiment_id)
+        print(run.info.run_name)
+        print(run.info.run_uuid)
         # Output the model and test data
+
         pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+
 
 def write_test_data(testX, testy):
     # test_data = pd.DataFrame(testX, columns = )
@@ -100,6 +108,8 @@ if __name__ == "__main__":
     parser.add_argument("--training_data", type=str, help="Path to training data")
     parser.add_argument("--test_data", type=str, help="Path to test data")
     parser.add_argument("--model_output", type=str, help="Path of output model")
+    parser.add_argument("--model_metadata", type=str, help="Path of model metadata")
+
 
 
     args = parser.parse_args()
@@ -107,7 +117,8 @@ if __name__ == "__main__":
     training_data = args.training_data
     test_data = args.test_data
     model_output = args.model_output
+    model_metadata = args.model_metadata
 
 
 
-    main(training_data, test_data, model_output)
+    main(training_data, test_data, model_output,model_metadata)
