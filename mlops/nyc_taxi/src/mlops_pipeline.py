@@ -32,13 +32,18 @@ def nyc_taxi_data_regression(
         predictions=predict_with_sample_data.outputs.predictions,
         model=train_with_sample_data.outputs.model_output,
     )
+    register_model_with_sample_data = gl_pipeline_components[5](
+        model_metadata=train_with_sample_data.outputs.model_metadata,
+        model_name="testmodel",
+    )
     return {
         "pipeline_job_prepped_data": prepare_sample_data.outputs.prep_data,
         "pipeline_job_transformed_data": transform_sample_data.outputs.transformed_data,
         "pipeline_job_trained_model": train_with_sample_data.outputs.model_output,
         "pipeline_job_test_data": train_with_sample_data.outputs.test_data,
         "pipeline_job_predictions": predict_with_sample_data.outputs.predictions,
-        "pipeline_job_score_report": score_with_sample_data.outputs.score_report
+        "pipeline_job_score_report": score_with_sample_data.outputs.score_report,
+        "pipeline_job_register_model": register_model_with_sample_data.outputs.??
     }
 
 def construct_pipeline(
@@ -56,6 +61,7 @@ def construct_pipeline(
     train_model = load_component(source=parent_dir + "/train.yml")
     predict_result = load_component(source=parent_dir + "/predict.yml")
     score_data = load_component(source=parent_dir + "/score.yml")
+    register_model = load_component(source=parent_dir + "/register.yml")
 
     # Set the environment name to custom environment using name and version number
     prepare_data.environment = environment_name
@@ -63,12 +69,14 @@ def construct_pipeline(
     train_model.environment = environment_name
     predict_result.environment = environment_name
     score_data.environment = environment_name
+    register_model.environment = environment_name
 
     gl_pipeline_components.append(prepare_data)
     gl_pipeline_components.append(transform_data)
     gl_pipeline_components.append(train_model)
     gl_pipeline_components.append(predict_result)
     gl_pipeline_components.append(score_data)
+    gl_pipeline_components.append(register_model)
 
     pipeline_job = nyc_taxi_data_regression(
         Input(type="uri_folder", path=data_dir)

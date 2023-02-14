@@ -9,15 +9,17 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import pickle
 import mlflow
+import json
 
 
-def main(training_data, test_data, model_output):
+def main(training_data, test_data, model_output,model_metadata):
     print("Hello training world...")
 
     lines = [
         f"Training data path: {training_data}",
         f"Test data path: {test_data}",
         f"Model output path: {model_output}",
+        f"Job metadata output path: {model_metadata}",
     ]
 
     for line in lines:
@@ -40,7 +42,7 @@ def main(training_data, test_data, model_output):
 
     trainX, testX, trainy, testy = split(train_data)
     write_test_data(testX, testy)
-    train_model(trainX, trainy)
+    train_model(trainX, trainy, model_metadata)
 
 
 def split(train_data):
@@ -80,14 +82,20 @@ def split(train_data):
     return trainX, testX, trainy, testy
 
 
-def train_model(trainX, trainy):
+def train_model(trainX, trainy, model_metadata):
     mlflow.autolog()
     # Train a Linear Regression Model with the train set
     model = LinearRegression().fit(trainX, trainy)
     print(model.score(trainX, trainy))
 
     # Output the model and test data
-    pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+    #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+    model_info = mlflow.sklearn.log_model(model, model_output)
+    run_info = {"run_id": model_info.run_id, "run_uri": model_info.model_uri}
+    with open(model_metadata, "w") as json_file:
+        json.dump(run_info, json_file, indent=4)
+
+    #mlflow.lightgbm.save_model(full_model, model_path)
 
 def write_test_data(testX, testy):
     # test_data = pd.DataFrame(testX, columns = )
@@ -101,11 +109,13 @@ if __name__ == "__main__":
     parser.add_argument("--training_data", type=str, help="Path to training data")
     parser.add_argument("--test_data", type=str, help="Path to test data")
     parser.add_argument("--model_output", type=str, help="Path of output model")
+    parser.add_argument("--model_metadata", type=str, help="Path for storing job metadata")
 
     args = parser.parse_args()
 
     training_data = args.training_data
     test_data = args.test_data
     model_output = args.model_output
+    model_metadata = args.model_metadata
 
-    main(training_data, test_data, model_output)
+    main(training_data, test_data, model_output,model_metadata)

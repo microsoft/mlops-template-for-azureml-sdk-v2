@@ -1,0 +1,17 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: register_taxi_model
+display_name: RegisterTaxiModel
+version: 1
+type: command
+inputs:
+  model_metadata:
+    type: uri_file
+  model_name:
+    type: string 
+code: ./../../../
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+command: >-
+  python -m src.nyc_src.register.register 
+  --model_metadata ${{inputs.model_metadata}}  
+  --model_name ${{inputs.model_name}}
+

@@ -76,3 +76,17 @@ stages:
       # https://github.com/Azure/azure-mlops-automation for details or get access
 
       - template: templates/wait_with_extension_job.yml
+      - job: Execute_Job_Pipeline1
+        dependsOn: WaitForCallback
+        steps:
+        - task: AzureCLI@2
+          displayName: Get buildid
+          name: get_build_id
+          inputs:
+            azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+            scriptType: bash
+            scriptLocation: inlineScript
+            workingDirectory: $(System.DefaultWorkingDirectory)
+            inlineScript: |
+              echo "$(BUILD.BUILDID)"
+              printenv
