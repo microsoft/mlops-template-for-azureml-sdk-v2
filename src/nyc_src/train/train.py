@@ -91,7 +91,7 @@ def train_model(trainX, trainy, model_metadata):
 
     # Output the model and test data
     #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-    model_info = mlflow.sklearn.log_model(python_model=model, artifact_path=model_output,registered_model_name="mymodel")
+    model_info = mlflow.sklearn.log_model(sk_model=model, artifact_path=model_output,registered_model_name="mymodel")
 
 
     #mlflow.lightgbm.save_model(full_model, model_path)
