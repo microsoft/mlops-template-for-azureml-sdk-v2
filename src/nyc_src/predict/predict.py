@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from pathlib import Path
 from sklearn.linear_model import LinearRegression
-import pickle
+import mlflow
 
 
 def main(model_input, test_data, prediction_path):
