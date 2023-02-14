@@ -43,7 +43,6 @@ def nyc_taxi_data_regression(
         "pipeline_job_test_data": train_with_sample_data.outputs.test_data,
         "pipeline_job_predictions": predict_with_sample_data.outputs.predictions,
         "pipeline_job_score_report": score_with_sample_data.outputs.score_report,
-        "pipeline_job_register_model": register_model_with_sample_data.outputs.??
     }
 
 def construct_pipeline(
