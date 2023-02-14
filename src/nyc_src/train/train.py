@@ -14,13 +14,14 @@ import json
 import time
 
 
-def main(training_data, test_data, model_output):
+def main(training_data, test_data, model_output, model_metadata):
     print("Hello training world...")
 
     lines = [
         f"Training data path: {training_data}",
         f"Test data path: {test_data}",
         f"Model output path: {model_output}",
+        f"Model output path: {model_metadata}",
     ]
 
     for line in lines:
@@ -94,6 +95,9 @@ def train_model(trainX, trainy):
         # Output the model and test data
         #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
     model_info = mlflow.sklearn.log_model(sk_model=model,artifact_path=args.model_output)
+    model_data = {"run_id": model_info.run_id, "run_uri": model_info.model_uri}
+    with open(args.model_metadata, "w") as json_file:
+        json.dump(model_data, json_file, indent=4)
         #print(mlflow.active_run().info.run_id)
         #mlflow.register_model("runs:/" + mlflow.active_run().info.run_id + "/" + args.model_output, "dummy_model")
         #model_info = mlflow.sklearn.log_model(model, model_output)
@@ -114,13 +118,14 @@ if __name__ == "__main__":
     parser.add_argument("--training_data", type=str, help="Path to training data")
     parser.add_argument("--test_data", type=str, help="Path to test data")
     parser.add_argument("--model_output", type=str, help="Path of output model")
-
+    parser.add_argument("--model_metadata", type=str, help="Path of model metadata")
 
     args = parser.parse_args()
 
     training_data = args.training_data
     test_data = args.test_data
     model_output = args.model_output
+    model_metadata = args.model_metadata
 
 
-    main(training_data, test_data, model_output)
+    main(training_data, test_data, model_output,model_metadata)
