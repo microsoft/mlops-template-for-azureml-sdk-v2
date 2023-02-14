@@ -17,6 +17,7 @@ def main(model_metadata, model_name):
         run_file.close()
         run_uri = model_metadata["run_uri"]
     model_version = mlflow.register_model(run_uri, model_name,tags={"buildid" : "100"})
+    
     print(model_version)
 
 if __name__ == "__main__":

@@ -90,10 +90,8 @@ def train_model(trainX, trainy, model_metadata):
 
     # Output the model and test data
     #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-    model_info = mlflow.sklearn.log_model(model, model_output)
-    run_info = {"run_id": model_info.run_id, "run_uri": model_info.model_uri}
-    with open(model_metadata, "w") as json_file:
-        json.dump(run_info, json_file, indent=4)
+    model_info = mlflow.sklearn.log_model(model, model_output,registered_model_name="mymodel",tags={"buildid" : "100"})
+
 
     #mlflow.lightgbm.save_model(full_model, model_path)
 
