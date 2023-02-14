@@ -85,7 +85,7 @@ def split(train_data):
 
 def train_model(trainX, trainy, model_output):
     mlflow.autolog()
-    os.environ["MLFLOW_AUTOLOGGING_ARTIFACT_DIRECTORY"] = model_output
+
     with mlflow.start_run(run_name="YOUR_RUN_NAME") as run:
         # Train a Linear Regression Model with the train set
         model = LinearRegression().fit(trainX, trainy)
