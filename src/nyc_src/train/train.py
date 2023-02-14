@@ -1,5 +1,8 @@
 import argparse
+from asyncore import write
 from pathlib import Path
+from uuid import uuid4
+from datetime import datetime
 import os
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -8,15 +11,13 @@ import pickle
 import mlflow
 
 
-
-def main(training_data, test_data, model_output, model_metadata):
+def main(training_data, test_data, model_output):
     print("Hello training world...")
 
     lines = [
         f"Training data path: {training_data}",
         f"Test data path: {test_data}",
         f"Model output path: {model_output}",
-        f"Model output path: {model_metadata}",
     ]
 
     for line in lines:
@@ -100,14 +101,11 @@ if __name__ == "__main__":
     parser.add_argument("--training_data", type=str, help="Path to training data")
     parser.add_argument("--test_data", type=str, help="Path to test data")
     parser.add_argument("--model_output", type=str, help="Path of output model")
-    parser.add_argument("--model_metadata", type=str, help="Path of model metadata")
 
     args = parser.parse_args()
 
     training_data = args.training_data
     test_data = args.test_data
     model_output = args.model_output
-    model_metadata = args.model_metadata
 
-
-    main(training_data, test_data, model_output,model_metadata)
+    main(training_data, test_data, model_output)

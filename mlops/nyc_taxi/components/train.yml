@@ -11,8 +11,6 @@ outputs:
     type: uri_folder
   test_data:
     type: uri_folder
-  model_metadata:
-    type: uri_file
 
 code: ./../../../
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
@@ -21,5 +19,5 @@ command: >-
   --training_data ${{inputs.training_data}} 
   --test_data ${{outputs.test_data}} 
   --model_output ${{outputs.model_output}}
-  --model_metadata ${{outputs.model_metadata}}
+
 
