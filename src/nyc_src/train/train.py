@@ -97,8 +97,8 @@ def train_model(trainX, trainy):
         #print(mlflow.active_run().info.run_id)
         #mlflow.register_model("runs:/" + mlflow.active_run().info.run_id + "/" + args.model_output, "dummy_model")
         #model_info = mlflow.sklearn.log_model(model, model_output)
-    time.sleep(300)
-    mlflow.register_model(model_info.model_uri, "mymodel2")
+    #time.sleep(300)
+    #mlflow.register_model(model_info.model_uri, "mymodel2")
 
         #mlflow.lightgbm.save_model(full_model, model_path)
 
