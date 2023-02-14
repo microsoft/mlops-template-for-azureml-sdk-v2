@@ -93,7 +93,8 @@ def train_model(trainX, trainy):
         print(run.info.run_uuid)
         # Output the model and test data
 
-        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+        #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+        mlflow.save_model(model, args.model_output)
 
 
 def write_test_data(testX, testy):
