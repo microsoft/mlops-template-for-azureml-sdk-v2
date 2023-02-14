@@ -9,6 +9,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import pickle
 import mlflow
+import mlflow.pyfunc
 import json
 
 
@@ -90,7 +91,7 @@ def train_model(trainX, trainy, model_metadata):
 
     # Output the model and test data
     #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-    model_info = mlflow.sklearn.log_model(model, model_output,registered_model_name="mymodel",tags={"buildid" : "100"})
+    model_info = mlflow.pyfunc.log_model(python_model=model, artifact_path=model_output,registered_model_name="mymodel",tags={"buildid" : "100"})
 
 
     #mlflow.lightgbm.save_model(full_model, model_path)
