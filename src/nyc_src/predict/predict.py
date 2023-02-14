@@ -66,7 +66,8 @@ def load_test_data(test_data):
 
 def predict(testX, testy, model_input, prediction_path):
     # Load the model from input port
-    model = pickle.load(open((Path(model_input) / "model.sav"), "rb"))
+    #model = pickle.load(open((Path(model_input) / "model.sav"), "rb"))
+    model = mlflow.sklearn.load_model(model_input)
     # model = (Path(model_input) / 'model.txt').read_text()
     # print('Model: ', model)
 
