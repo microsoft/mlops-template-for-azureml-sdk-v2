@@ -93,7 +93,7 @@ def train_model(trainX, trainy, model_output):
 
         # Output the model and test data
         #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-        mlflow.sklearn.log_model(sk_model=model,artifact_path="sklearn-model1", registered_model_name="sk-learn-random-forest-reg-model"
+        mlflow.sklearn.log_model(sk_model=model,artifact_path=model_output, registered_model_name="sk-learn-random-forest-reg-model"
     )
         #model_info = mlflow.sklearn.log_model(model, model_output)
         #mlflow.register_model(model_info.model_uri, "mymodel1")
