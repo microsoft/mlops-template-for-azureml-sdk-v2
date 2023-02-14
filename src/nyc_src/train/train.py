@@ -93,7 +93,7 @@ def train_model(trainX, trainy):
 
         # Output the model and test data
         #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-        mlflow.sklearn.save_model(sk_model=model,artifact_path=args.model_output)
+        mlflow.sklearn.save_model(sk_model=model,path=args.model_output)
         print(mlflow.active_run().info.run_id)
         mlflow.register_model("runs:/" + mlflow.active_run().info.run_id + "/" + args.model_output)
         #model_info = mlflow.sklearn.log_model(model, model_output)
