@@ -1,14 +1,12 @@
 import argparse
-from asyncore import write
 from pathlib import Path
-from uuid import uuid4
-from datetime import datetime
 import os
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import pickle
 import mlflow
+
 
 
 def main(training_data, test_data, model_output):
@@ -83,11 +81,12 @@ def split(train_data):
 def train_model(trainX, trainy):
     mlflow.autolog()
     # Train a Linear Regression Model with the train set
-    model = LinearRegression().fit(trainX, trainy)
-    print(model.score(trainX, trainy))
-
-    # Output the model and test data
-    pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+    with mlflow.start_run(run_name="YOUR_RUN_NAME") as run:
+        model = LinearRegression().fit(trainX, trainy)
+        print(model.score(trainX, trainy))
+        print(mlflow.active_run().info.run_id)
+        # Output the model and test data
+        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
 
 def write_test_data(testX, testy):
     # test_data = pd.DataFrame(testX, columns = )
@@ -102,10 +101,13 @@ if __name__ == "__main__":
     parser.add_argument("--test_data", type=str, help="Path to test data")
     parser.add_argument("--model_output", type=str, help="Path of output model")
 
+
     args = parser.parse_args()
 
     training_data = args.training_data
     test_data = args.test_data
     model_output = args.model_output
+
+
 
     main(training_data, test_data, model_output)
