@@ -13,14 +13,13 @@ import mlflow.pyfunc
 import json
 
 
-def main(training_data, test_data, model_output,model_metadata):
+def main(training_data, test_data, model_output):
     print("Hello training world...")
 
     lines = [
         f"Training data path: {training_data}",
         f"Test data path: {test_data}",
         f"Model output path: {model_output}",
-        f"Job metadata output path: {model_metadata}",
     ]
 
     for line in lines:
@@ -93,7 +92,7 @@ def train_model(trainX, trainy):
 
         # Output the model and test data
         #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-        mlflow.sklearn.save_model(sk_model=model,path=args.model_output)
+        mlflow.sklearn.log_model(sk_model=model,artifact_path=args.model_output)
         print(mlflow.active_run().info.run_id)
         mlflow.register_model("runs:/" + mlflow.active_run().info.run_id + "/" + args.model_output, "dummy_model")
         #model_info = mlflow.sklearn.log_model(model, model_output)
@@ -113,13 +112,13 @@ if __name__ == "__main__":
     parser.add_argument("--training_data", type=str, help="Path to training data")
     parser.add_argument("--test_data", type=str, help="Path to test data")
     parser.add_argument("--model_output", type=str, help="Path of output model")
-    parser.add_argument("--model_metadata", type=str, help="Path for storing job metadata")
+
 
     args = parser.parse_args()
 
     training_data = args.training_data
     test_data = args.test_data
     model_output = args.model_output
-    model_metadata = args.model_metadata
 
-    main(training_data, test_data, model_output,model_metadata)
+
+    main(training_data, test_data, model_output)
