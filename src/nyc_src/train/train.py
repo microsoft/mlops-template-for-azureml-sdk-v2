@@ -94,7 +94,7 @@ def train_model(trainX, trainy):
 
         # Output the model and test data
         #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-    model_info = mlflow.sklearn.log_model(sk_model=model,artifact_path=args.model_output)
+    model_info = mlflow.sklearn.log_model(model,"model_folder")
     model_data = {"run_id": model_info.run_id, "run_uri": model_info.model_uri}
     with open(args.model_metadata, "w") as json_file:
         json.dump(model_data, json_file, indent=4)
