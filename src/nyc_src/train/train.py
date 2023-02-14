@@ -85,16 +85,20 @@ def split(train_data):
 
 def train_model(trainX, trainy, model_output):
     mlflow.autolog()
-    # Train a Linear Regression Model with the train set
-    model = LinearRegression().fit(trainX, trainy)
-    print(model.score(trainX, trainy))
+    os.environ["MLFLOW_AUTOLOGGING_ARTIFACT_DIRECTORY"] = model_output
+    with mlflow.start_run(run_name="YOUR_RUN_NAME") as run:
+        # Train a Linear Regression Model with the train set
+        model = LinearRegression().fit(trainX, trainy)
+        print(model.score(trainX, trainy))
 
-    # Output the model and test data
-    #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-    model_info = mlflow.sklearn.log_model(model, model_output)
-    mlflow.register_model(model_info.model_uri, "mymodel1")
+        # Output the model and test data
+        #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+        mlflow.sklearn.log_model(sk_model=model,artifact_path="sklearn-model1", registered_model_name="sk-learn-random-forest-reg-model"
+    )
+        #model_info = mlflow.sklearn.log_model(model, model_output)
+        #mlflow.register_model(model_info.model_uri, "mymodel1")
 
-    #mlflow.lightgbm.save_model(full_model, model_path)
+        #mlflow.lightgbm.save_model(full_model, model_path)
 
 def write_test_data(testX, testy):
     # test_data = pd.DataFrame(testX, columns = )
