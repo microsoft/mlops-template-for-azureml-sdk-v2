@@ -8,11 +8,10 @@ inputs:
     type: uri_folder
 outputs:
   model_output:
-    type: uri_folder
+    type: mlflow_model
   test_data:
     type: uri_folder
-  model_metadata:
-    type: uri_file
+
 code: ./../../../
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
 command: >-
@@ -20,5 +19,4 @@ command: >-
   --training_data ${{inputs.training_data}} 
   --test_data ${{outputs.test_data}} 
   --model_output ${{outputs.model_output}}
-  --model_metadata ${{outputs.model_metadata}}
 

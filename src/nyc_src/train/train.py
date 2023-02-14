@@ -92,9 +92,9 @@ def train_model(trainX, trainy):
 
         # Output the model and test data
         #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-        mlflow.sklearn.log_model(sk_model=model,artifact_path=args.model_output)
-        print(mlflow.active_run().info.run_id)
-        mlflow.register_model("runs:/" + mlflow.active_run().info.run_id + "/" + args.model_output, "dummy_model")
+        mlflow.sklearn.log_model(sk_model=model,artifact_path=args.model_output, registered_model_name="ritesh")
+        #print(mlflow.active_run().info.run_id)
+        #mlflow.register_model("runs:/" + mlflow.active_run().info.run_id + "/" + args.model_output, "dummy_model")
         #model_info = mlflow.sklearn.log_model(model, model_output)
         #mlflow.register_model(model_info.model_uri, "mymodel1")
 
