@@ -88,7 +88,7 @@ def construct_pipeline(
 
     # set pipeline level compute
     pipeline_job.settings.default_compute = cluster_name
-
+    pipeline_job.settings.force_rerun = True
     # set pipeline level datastore
     pipeline_job.settings.default_datastore = "workspaceblobstore"
 
