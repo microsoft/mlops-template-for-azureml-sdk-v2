@@ -81,7 +81,7 @@ def split(train_data):
 
 
 def train_model(trainX, trainy):
-    mlflow.sklearn.autolog()
+    mlflow.autolog()
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
         model = LinearRegression().fit(trainX, trainy)
