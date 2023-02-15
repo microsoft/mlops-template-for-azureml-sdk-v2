@@ -99,8 +99,8 @@ def train_model(trainX, trainy):
         run_id = mlflow.active_run().info.run_id
         model_uri = f"runs:/{run_id}/model"
         print(model_uri)
-        
-        #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+        mlflow.register_model(model_uri, 'somethign')
+        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
         #mlflow.sklearn.log_model(model, args.model_output)
 
 
