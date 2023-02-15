@@ -4,7 +4,7 @@ import os
 import json
 
 
-def main(model_path, model_name):
+def main(model_metadata, model_name):
     try:
         run_file = open(args.model_metadata)
         model_metadata = json.load(run_file)
@@ -13,7 +13,6 @@ def main(model_path, model_name):
         raise
     finally:
         run_file.close()
-        #run_id = model_metadata["run_id"]
         run_uri = model_metadata["run_uri"]
     model_version = mlflow.register_model(run_uri, model_name)
     print(model_version)
@@ -27,8 +26,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-    print(args.model_path)
+    print(args.model_metadata)
     print(args.model_name)
     #print(args.trigger_buildid)
 
-    main(args.model_path , args.model_name )
+    main(args.model_metadata , args.model_name )
