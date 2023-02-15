@@ -34,7 +34,7 @@ def nyc_taxi_data_regression(
     )
     register_model_with_sample_data = gl_pipeline_components[5](
         model_metadata=train_with_sample_data.outputs.model_metadata,
-        model_name="dummyname",
+        model_name="dummyname1",
     )
 
     return {
