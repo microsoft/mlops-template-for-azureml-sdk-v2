@@ -14,7 +14,14 @@ def main(model_metadata, model_name):
     finally:
         run_file.close()
         run_uri = model_metadata["run_uri"]
-    model_version = mlflow.register_model(run_uri, model_name, tags={"aa":"bb"})
+    model_version = mlflow.register_model(run_uri, model_name)
+    client = mlflow.MlflowClient()
+    client.set_model_version_tag(
+        name=model_name,
+        version=model_version,
+        key="aa",
+        value="bb"
+        )
     print(model_version)
 
 
