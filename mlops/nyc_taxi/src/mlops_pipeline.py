@@ -51,10 +51,7 @@ def construct_pipeline(
     environment_name: str,
     display_name: str,
     deploy_environment: str,
-    build_reference: str,
-    subscription_id: str,
-    resource_group_name: str,
-    workspace_name: str
+    build_reference: str
 ):
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
     data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
@@ -82,10 +79,7 @@ def construct_pipeline(
     gl_pipeline_components.append(register_model)
 
     pipeline_job = nyc_taxi_data_regression(
-        Input(type="uri_folder", path=data_dir),
-        subscription_id,
-        resource_group_name,
-        workspace_name,
+        Input(type="uri_folder", path=data_dir)
     )
     pipeline_job.display_name=display_name
     pipeline_job.tags={
