@@ -6,6 +6,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import pickle
 import mlflow
+import json
 
 
 
@@ -92,7 +93,9 @@ def train_model(trainX, trainy):
         print(run.info.run_name)
         print(run.info.run_uuid)
         # Output the model and test data
-
+        model_data = {"run_id": run.info.run_id, "run_name": run.info.run_name}
+        with open(args.model_metadata, "w") as json_file:
+            json.dump(model_data, json_file, indent=4)
         pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
         #mlflow.save_model(model, args.model_output)
 
