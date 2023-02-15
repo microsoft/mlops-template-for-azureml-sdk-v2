@@ -10,7 +10,7 @@ inputs:
     type: string
   subscription_id:
     type: string
-  resorce_group_name:
+  resource_group_name:
     type: string
   workspace_name:
     type: string 
@@ -21,7 +21,7 @@ command: >-
   --model_path ${{inputs.model_path}}  
   --model_name ${{inputs.model_name}}
   --subscription_id ${{inputs.subscription_id}}
-  --resorce_group_name ${{inputs.resorce_group_name}}
+  --resource_group_name ${{inputs.resource_group_name}}
   --workspace_name ${{inputs.workspace_name}}
 
 
