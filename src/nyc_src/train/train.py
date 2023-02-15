@@ -81,7 +81,7 @@ def split(train_data):
 
 
 def train_model(trainX, trainy):
-    mlflow.autolog()
+    #mlflow.autolog()
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
         model = LinearRegression().fit(trainX, trainy)
@@ -96,8 +96,8 @@ def train_model(trainX, trainy):
         model_data = {"run_id": run.info.run_id, "run_name": run.info.run_name}
         with open(args.model_metadata, "w") as json_file:
             json.dump(model_data, json_file, indent=4)
-        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-        #mlflow.save_model(model, args.model_output)
+        #pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+        mlflow.sklearn.log_model(model, args.model_output)
 
 
 def write_test_data(testX, testy):

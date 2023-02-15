@@ -1,5 +1,5 @@
 from azure.ai.ml import MLClient
-from azure.ai.ml.entities import Model
+from azure.ai.ml.entities import Model, Workspace
 from azure.identity import DefaultAzureCredential
 from azure.ai.ml.constants import AssetTypes
 import argparse
@@ -8,7 +8,6 @@ import json
 
 
 def main(model_path, model_name,subscription_id,resource_group_name,workspace_name):
-        # , trigger_buildid
     client = MLClient(
         DefaultAzureCredential(),
         subscription_id=subscription_id,
