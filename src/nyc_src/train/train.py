@@ -88,13 +88,15 @@ def train_model(trainX, trainy):
         print(model.score(trainX, trainy))
 
         # Output the model and test data
-        model_data = {"run_id": run.info.run_id, "run_name": run.info.run_name}
-        with open(args.model_metadata, "w") as json_file:
-            json.dump(model_data, json_file, indent=4)
         run_id = mlflow.active_run().info.run_id
         model_uri = f"runs:/{run_id}/model"
+        model_data = {"run_id": run.info.run_id, "run_uri": model_uri}
+        with open(args.model_metadata, "w") as json_file:
+            json.dump(model_data, json_file, indent=4)
+        
+       
         print(model_uri)
-        mlflow.register_model(model_uri, 'somethign')
+        #mlflow.register_model(model_uri, 'somethign')
         pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
         #mlflow.sklearn.log_model(model, args.model_output)
 

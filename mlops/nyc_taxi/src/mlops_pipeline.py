@@ -13,7 +13,7 @@ gl_pipeline_components = []
 
 @pipeline()
 def nyc_taxi_data_regression(
-    pipeline_job_input, subscription_id, resource_group_name, workspace_name
+    pipeline_job_input
     ):
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
@@ -33,10 +33,7 @@ def nyc_taxi_data_regression(
         model=train_with_sample_data.outputs.model_output,
     )
     register_model_with_sample_data = gl_pipeline_components[5](
-        subscription_id=subscription_id,
-        resource_group_name=resource_group_name,
-        workspace_name=workspace_name,
-        model_path=train_with_sample_data.outputs.model_output,
+        model_metadata=train_with_sample_data.outputs.model_metadata,
         model_name="dummyname",
     )
 
@@ -198,9 +195,7 @@ def prepare_and_execute(
         display_name,
         deploy_environment,
         build_reference,
-        subscription_id,
-        resource_group_name,
-        workspace_name
+
     )
 
     execute_pipeline(
