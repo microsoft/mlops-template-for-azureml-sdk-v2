@@ -13,7 +13,7 @@ gl_pipeline_components = []
 
 @pipeline()
 def nyc_taxi_data_regression(
-    pipeline_job_input
+    pipeline_job_input, subscription_id, resource_group_name, workspace_name
     ):
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
@@ -32,6 +32,13 @@ def nyc_taxi_data_regression(
         predictions=predict_with_sample_data.outputs.predictions,
         model=train_with_sample_data.outputs.model_output,
     )
+    register_model_with_sample_data = gl_pipeline_components[5](
+        subscription_id=subscription_id,
+        resource_group_name=resource_group_name,
+        workspace_name=workspace_name,
+        model_path=train_with_sample_data.outputs.model_output,
+        model_name="dummyname",
+    )
 
     return {
         "pipeline_job_prepped_data": prepare_sample_data.outputs.prep_data,
@@ -47,7 +54,10 @@ def construct_pipeline(
     environment_name: str,
     display_name: str,
     deploy_environment: str,
-    build_reference: str
+    build_reference: str,
+    subscription_id: str,
+    resource_group_name: str,
+    workspace_name: str
 ):
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
     data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
@@ -75,7 +85,10 @@ def construct_pipeline(
     gl_pipeline_components.append(register_model)
 
     pipeline_job = nyc_taxi_data_regression(
-        Input(type="uri_folder", path=data_dir)
+        Input(type="uri_folder", path=data_dir),
+        subscription_id,
+        resource_group_name,
+        workspace_name,
     )
     pipeline_job.display_name=display_name
     pipeline_job.tags={
@@ -184,7 +197,10 @@ def prepare_and_execute(
         f"azureml:{environment.name}:{environment.version}",
         display_name,
         deploy_environment,
-        build_reference
+        build_reference,
+        subscription_id,
+        resource_group_name,
+        workspace_name
     )
 
     execute_pipeline(

@@ -4,14 +4,24 @@ display_name: RegisterTaxiModel
 version: 1
 type: command
 inputs:
-  model_metadata:
-    type: uri_file
+  model_path:
+    type: uri_folder
   model_name:
+    type: string
+  subscription_id:
+    type: string
+  resorce_group_name:
+    type: string
+  workspace_name:
     type: string 
 code: ./../../../
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
 command: >-
   python -m src.nyc_src.register.register 
-  --model_metadata ${{inputs.model_metadata}}  
+  --model_path ${{inputs.model_path}}  
   --model_name ${{inputs.model_name}}
+  --subscription_id ${{inputs.subscription_id}}
+  --resorce_group_name ${{inputs.resorce_group_name}}
+  --workspace_name ${{inputs.workspace_name}}
+
 
