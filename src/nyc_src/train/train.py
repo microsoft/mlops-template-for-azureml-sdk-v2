@@ -86,12 +86,7 @@ def train_model(trainX, trainy):
     with mlflow.start_run() as run:
         model = LinearRegression().fit(trainX, trainy)
         print(model.score(trainX, trainy))
-        print(mlflow.active_run().info.run_id)
-        print(run.info.run_id)
-        print(run.info.artifact_uri)
-        print(run.info.experiment_id)
-        print(run.info.run_name)
-        print(run.info.run_uuid)
+
         # Output the model and test data
         model_data = {"run_id": run.info.run_id, "run_name": run.info.run_name}
         with open(args.model_metadata, "w") as json_file:
