@@ -8,23 +8,23 @@ def main(model_metadata, model_name, build_reference):
     try:
         run_file = open(args.model_metadata)
         model_metadata = json.load(run_file)
+        run_uri = model_metadata["run_uri"]
+        model_version = mlflow.register_model(run_uri, model_name)
+        
+        client = mlflow.MlflowClient()
+        client.set_model_version_tag(
+            name=model_name,
+            version=model_version.version,
+            key="build_id",
+            value=build_reference
+        )
+        print(model_version)
     except Exception as ex:
         print(ex)
         raise
     finally:
         run_file.close()
-        run_uri = model_metadata["run_uri"]
-    model_version = mlflow.register_model(run_uri, model_name)
-    client = mlflow.MlflowClient()
-
-    client.set_model_version_tag(
-        name=model_name,
-        version=model_version.version,
-        key="build_id",
-        value=build_reference
-        )
-    print(model_version)
-
+        
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("register_model")
@@ -36,6 +36,5 @@ if __name__ == "__main__":
     
     print(args.model_metadata)
     print(args.model_name)
-    #print(args.trigger_buildid)
 
     main(args.model_metadata , args.model_name, args.build_reference )

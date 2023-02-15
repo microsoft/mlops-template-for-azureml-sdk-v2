@@ -9,7 +9,6 @@ import mlflow
 import json
 
 
-
 def main(training_data, test_data, model_output,model_metadata):
     print("Hello training world...")
 
@@ -17,7 +16,7 @@ def main(training_data, test_data, model_output,model_metadata):
         f"Training data path: {training_data}",
         f"Test data path: {test_data}",
         f"Model output path: {model_output}",
-        f"Model output path: {model_metadata}",
+        f"Model metadata path: {model_metadata}",
     ]
 
     for line in lines:
@@ -87,18 +86,15 @@ def train_model(trainX, trainy):
         model = LinearRegression().fit(trainX, trainy)
         print(model.score(trainX, trainy))
 
-        # Output the model and test data
+        # Output the model, metadata and test data
         run_id = mlflow.active_run().info.run_id
         model_uri = f"runs:/{run_id}/model"
         model_data = {"run_id": run.info.run_id, "run_uri": model_uri}
         with open(args.model_metadata, "w") as json_file:
             json.dump(model_data, json_file, indent=4)
         
-       
-        print(model_uri)
-        #mlflow.register_model(model_uri, 'somethign')
         pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-        #mlflow.sklearn.log_model(model, args.model_output)
+
 
 
 def write_test_data(testX, testy):
@@ -115,15 +111,11 @@ if __name__ == "__main__":
     parser.add_argument("--model_output", type=str, help="Path of output model")
     parser.add_argument("--model_metadata", type=str, help="Path of model metadata")
 
-
-
     args = parser.parse_args()
 
     training_data = args.training_data
     test_data = args.test_data
     model_output = args.model_output
     model_metadata = args.model_metadata
-
-
 
     main(training_data, test_data, model_output,model_metadata)
