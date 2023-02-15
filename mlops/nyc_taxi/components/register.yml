@@ -8,12 +8,15 @@ inputs:
     type: uri_folder
   model_name:
     type: string
+  build_reference:
+    type: string
 code: ./../../../
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
 command: >-
   python -m src.nyc_src.register.register 
   --model_metadata ${{inputs.model_metadata}}  
   --model_name ${{inputs.model_name}}
+  --build_reference ${{inputs.build_reference}}
 
 
 

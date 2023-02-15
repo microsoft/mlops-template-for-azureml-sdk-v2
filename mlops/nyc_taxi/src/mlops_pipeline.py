@@ -13,7 +13,9 @@ gl_pipeline_components = []
 
 @pipeline()
 def nyc_taxi_data_regression(
-    pipeline_job_input
+    pipeline_job_input,
+    model_name,
+    build_reference
     ):
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
@@ -34,7 +36,8 @@ def nyc_taxi_data_regression(
     )
     register_model_with_sample_data = gl_pipeline_components[5](
         model_metadata=train_with_sample_data.outputs.model_metadata,
-        model_name="dummyname1",
+        model_name=model_name,
+        build_reference=build_reference
     )
 
     return {
@@ -51,7 +54,8 @@ def construct_pipeline(
     environment_name: str,
     display_name: str,
     deploy_environment: str,
-    build_reference: str
+    build_reference: str,
+    model_name: str
 ):
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
     data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
@@ -79,7 +83,9 @@ def construct_pipeline(
     gl_pipeline_components.append(register_model)
 
     pipeline_job = nyc_taxi_data_regression(
-        Input(type="uri_folder", path=data_dir)
+        Input(type="uri_folder", path=data_dir),
+        model_name,
+        build_reference
     )
     pipeline_job.display_name=display_name
     pipeline_job.tags={
@@ -157,6 +163,7 @@ def prepare_and_execute(
     experiment_name: str,
     deploy_environment: str,
     build_reference: str,
+    model_name: str,
     output_file: str
 ):
     compute = get_compute(
@@ -189,6 +196,7 @@ def prepare_and_execute(
         display_name,
         deploy_environment,
         build_reference,
+        model_name
 
     )
 
@@ -221,6 +229,7 @@ def main():
     parser.add_argument("--env_base_image_name", type=str, help="Environment custom base image name")
     parser.add_argument("--conda_path", type=str, help="path to conda requirements file")
     parser.add_argument("--env_description", type=str, default="Environment created using Conda.")
+    parser.add_argument("--model_name", type=str, default="Name used for registration of model")
     parser.add_argument("--output_file", type=str, required=False, help="A file to save run id")
 
     args = parser.parse_args()
@@ -244,6 +253,7 @@ def main():
         args.experiment_name,
         args.deploy_environment,
         args.build_reference,
+        args.model_name,
         args.output_file
     )
 
