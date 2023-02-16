@@ -17,28 +17,28 @@ def main(model_metadata, model_name,score_report, build_reference):
         mse = score_data["mse"]
         coff = score_data["coff"]
         
-        model_version = mlflow.register_model(run_uri, model_name)
+        model_version = mlflow.register_model(run_uri, model_name, tags={"aa":"bb"})
         
         client = mlflow.MlflowClient()
-        client.set_model_version_tags(
+        client.set_model_version_tag(
             name=model_name,
             version=model_version.version,
             key="mse",
             value=mse
         )
-        client.set_model_version_tags(
+        client.set_model_version_tag(
             name=model_name,
             version=model_version.version,
             key="coff",
             value=coff
         )
-        client.set_model_version_tags(
+        client.set_model_version_tag(
             name=model_name,
             version=model_version.version,
             key="cod",
             value=cod
         )
-        client.set_model_version_tags(
+        client.set_model_version_tag(
             name=model_name,
             version=model_version.version,
             key="build_id",
