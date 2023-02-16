@@ -8,6 +8,8 @@ inputs:
     type: uri_folder
   model_name:
     type: string
+  score_report:
+    type: uri_folder
   build_reference:
     type: string
 code: ./../../../
@@ -16,6 +18,7 @@ command: >-
   python -m src.nyc_src.register.register 
   --model_metadata ${{inputs.model_metadata}}  
   --model_name ${{inputs.model_name}}
+  --score_report ${{inputs.score_report}}
   --build_reference ${{inputs.build_reference}}
 
 
