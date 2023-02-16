@@ -17,7 +17,7 @@ pool:
 parameters:
  - name: exec_environment
    displayName: "Execution Environment"
-   default: "DEV"
+   default: "dev"
 
 variables:
 - group: MLOps-${{parameters.exec_environment}}-VG
