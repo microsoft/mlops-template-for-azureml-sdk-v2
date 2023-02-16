@@ -17,7 +17,7 @@ def main(model_metadata, model_name,score_report, build_reference):
         mse = score_data["mse"]
         coff = score_data["coff"]
         
-        model_version = mlflow.register_model(run_uri, model_name, tags={"aa":"bb"})
+        model_version = mlflow.register_model(run_uri, model_name)
         
         client = mlflow.MlflowClient()
         client.set_model_version_tag(
