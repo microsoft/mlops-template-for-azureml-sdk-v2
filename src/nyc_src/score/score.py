@@ -6,6 +6,7 @@ from sklearn.linear_model import LinearRegression
 import pickle
 from sklearn.metrics import mean_squared_error, r2_score
 import mlflow
+import json
 
 def main(predictions, model, score_report):
     print("hello scoring world...")
@@ -62,13 +63,9 @@ def write_results(model, predictions, test_data, score_report):
     print("Model: ", model)
 
     # Print score report to a text file
-    (Path(score_report) / "score.txt").write_text(
-        "Scored with the following model:\n{}".format(model)
-    )
-    with open((Path(score_report) / "score.txt"), "a") as f:
-        f.write("\n Coefficients: \n %s \n" % str(model.coef_))
-        f.write("Mean squared error: %.2f \n" % mean_squared_error(actuals, predictions))
-        f.write("Coefficient of determination: %.2f \n" % r2_score(actuals, predictions))
+    model_score = {"mse": mean_squared_error(actuals, predictions), "coff": str(model.coef_),"cod": r2_score(actuals, predictions)}
+    with open((Path(score_report) / "score.txt"), "w") as json_file:
+        json.dump(model_score, json_file, indent=4)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("score")
