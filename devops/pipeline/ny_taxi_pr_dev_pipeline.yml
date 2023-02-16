@@ -58,4 +58,5 @@ stages:
                 --wait_for_completion True \
                 --environment_name $(ENVIRONMENT_NAME) \
                 --env_base_image_name $(ENV_BASE_IMAGE_NAME) \
+                --model_name $(MODEL_NAME) \
                 --conda_path $(CONDA_PATH)
