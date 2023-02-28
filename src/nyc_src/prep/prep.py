@@ -104,9 +104,12 @@ def data_prep(green_data, yellow_data):
     combined_df = green_data_clean.append(yellow_data_clean, ignore_index=True)
     combined_df.reset_index(inplace=True, drop=True)
 
-    output_green = green_data_clean.to_csv(os.path.join(prep_data, "green_prep_data.csv"))
+    output_green = green_data_clean.to_csv(
+        os.path.join(prep_data, "green_prep_data.csv")
+    )
     output_yellow = yellow_data_clean.to_csv(
-        os.path.join(prep_data, "yellow_prep_data.csv"))
+        os.path.join(prep_data, "yellow_prep_data.csv")
+    )
     merged_data = combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
 
     print("Finish")
@@ -114,6 +117,7 @@ def data_prep(green_data, yellow_data):
 
 # These functions ensure that null data is removed from the dataset,
 # which will help increase machine learning model accuracy.
+
 
 def get_dict(dict_str):
     pairs = dict_str.strip("{}").split(";")
@@ -146,10 +150,7 @@ if __name__ == "__main__":
         help="Path to raw data",
     )
     parser.add_argument(
-        "--prep_data",
-        type=str,
-        default="../data/prep_data",
-        help="Path to prep data"
+        "--prep_data", type=str, default="../data/prep_data", help="Path to prep data"
     )
 
     args = parser.parse_args()

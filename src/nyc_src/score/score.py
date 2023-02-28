@@ -8,6 +8,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 import mlflow
 import json
 
+
 def main(predictions, model, score_report):
     print("hello scoring world...")
 
@@ -43,6 +44,7 @@ def main(predictions, model, score_report):
 
 # Print the results of scoring the predictions against actual values in the test data
 
+
 def write_results(model, predictions, test_data, score_report):
     # The coefficients
     print("Coefficients: \n", model.coef_)
@@ -63,9 +65,14 @@ def write_results(model, predictions, test_data, score_report):
     print("Model: ", model)
 
     # Print score report to a text file
-    model_score = {"mse": mean_squared_error(actuals, predictions), "coff": str(model.coef_),"cod": r2_score(actuals, predictions)}
+    model_score = {
+        "mse": mean_squared_error(actuals, predictions),
+        "coff": str(model.coef_),
+        "cod": r2_score(actuals, predictions),
+    }
     with open((Path(score_report) / "score.txt"), "w") as json_file:
         json.dump(model_score, json_file, indent=4)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("score")

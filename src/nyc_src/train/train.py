@@ -9,7 +9,7 @@ import mlflow
 import json
 
 
-def main(training_data, test_data, model_output,model_metadata):
+def main(training_data, test_data, model_output, model_metadata):
     print("Hello training world...")
 
     lines = [
@@ -72,7 +72,9 @@ def split(train_data):
     ]
 
     # Split the data into train and test sets
-    trainX, testX, trainy, testy = train_test_split(X, y, test_size=0.3, random_state=42)
+    trainX, testX, trainy, testy = train_test_split(
+        X, y, test_size=0.3, random_state=42
+    )
     print(trainX.shape)
     print(trainX.columns)
 
@@ -92,9 +94,8 @@ def train_model(trainX, trainy):
         model_data = {"run_id": run.info.run_id, "run_uri": model_uri}
         with open(args.model_metadata, "w") as json_file:
             json.dump(model_data, json_file, indent=4)
-        
-        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
 
+        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
 
 
 def write_test_data(testX, testy):
@@ -118,4 +119,4 @@ if __name__ == "__main__":
     model_output = args.model_output
     model_metadata = args.model_metadata
 
-    main(training_data, test_data, model_output,model_metadata)
+    main(training_data, test_data, model_output, model_metadata)

@@ -11,15 +11,12 @@ from mlops.common.get_environment import get_environment
 
 gl_pipeline_components = []
 
+
 @pipeline()
-def nyc_taxi_data_regression(
-    pipeline_job_input,
-    model_name,
-    build_reference
-    ):
+def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
-        )
+    )
     transform_sample_data = gl_pipeline_components[1](
         clean_data=prepare_sample_data.outputs.prep_data,
     )
@@ -38,7 +35,7 @@ def nyc_taxi_data_regression(
         model_metadata=train_with_sample_data.outputs.model_metadata,
         model_name=model_name,
         score_report=score_with_sample_data.outputs.score_report,
-        build_reference=build_reference
+        build_reference=build_reference,
     )
 
     return {
@@ -50,13 +47,14 @@ def nyc_taxi_data_regression(
         "pipeline_job_score_report": score_with_sample_data.outputs.score_report,
     }
 
+
 def construct_pipeline(
     cluster_name: str,
     environment_name: str,
     display_name: str,
     deploy_environment: str,
     build_reference: str,
-    model_name: str
+    model_name: str,
 ):
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
     data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
@@ -84,14 +82,12 @@ def construct_pipeline(
     gl_pipeline_components.append(register_model)
 
     pipeline_job = nyc_taxi_data_regression(
-        Input(type="uri_folder", path=data_dir),
-        model_name,
-        build_reference
+        Input(type="uri_folder", path=data_dir), model_name, build_reference
     )
-    pipeline_job.display_name=display_name
-    pipeline_job.tags={
-        'environment': deploy_environment,
-        'build_reference': build_reference 
+    pipeline_job.display_name = display_name
+    pipeline_job.tags = {
+        "environment": deploy_environment,
+        "build_reference": build_reference,
     }
 
     # demo how to change pipeline output settings
@@ -105,6 +101,7 @@ def construct_pipeline(
 
     return pipeline_job
 
+
 def execute_pipeline(
     subscription_id: str,
     resource_group_name: str,
@@ -112,38 +109,71 @@ def execute_pipeline(
     experiment_name: str,
     pipeline_job: pipeline,
     wait_for_completion: str,
-    output_file: str
+    output_file: str,
 ):
     try:
         client = MLClient(
             DefaultAzureCredential(),
             subscription_id=subscription_id,
             resource_group_name=resource_group_name,
-            workspace_name=workspace_name)
+            workspace_name=workspace_name,
+        )
 
         pipeline_job = client.jobs.create_or_update(
             pipeline_job, experiment_name=experiment_name
         )
 
         print(f"The job {pipeline_job.name} has been submitted!")
-        if (output_file is not None):
+        if output_file is not None:
             with open(output_file, "w") as out_file:
                 out_file.write(pipeline_job.name)
-    
+
         if wait_for_completion == "True":
-            job_status = ["NotStarted", "Queued", "Starting", "Preparing", "Running", "Finalizing"]
+            total_wait_time = 3600
+            current_wait_time = 0
+            job_status = [
+                "NotStarted",
+                "Queued",
+                "Starting",
+                "Preparing",
+                "Running",
+                "Finalizing",
+                "Provisioning",
+                "CancelRequested",
+                "Failed",
+                "Canceled",
+                "NotResponding",
+            ]
+
             while pipeline_job.status in job_status:
-                time.sleep(15)
-                pipeline_job = client.jobs.get(pipeline_job.name) 
-                print(pipeline_job.status)
-            if pipeline_job.status == 'Completed' or pipeline_job.status == 'Finished':
-                print(f"job status: {pipeline_job.status}")
-                print("exiting job successfully..")
+                if current_wait_time <= total_wait_time:
+                    time.sleep(20)
+                    pipeline_job = client.jobs.get(pipeline_job.name)
+
+                    print("Job Status:", pipeline_job.status)
+
+                    current_wait_time = current_wait_time + 15
+
+                    if (
+                        pipeline_job.status == "Failed"
+                        or pipeline_job.status == "NotResponding"
+                        or pipeline_job.status == "CancelRequested"
+                        or pipeline_job.status == "Canceled"
+                    ):
+                        break
+                else:
+                    break
+
+            if pipeline_job.status == "Completed" or pipeline_job.status == "Finished":
+                print("job completed")
             else:
-                raise Exception("Exiting job with failure...")
+                raise Exception("Sorry, exiting job with failure..")
     except Exception as ex:
-        print("Oops! invalid credentials or error while creating ML environment.. Try again...")
+        print(
+            "Oops! invalid credentials or error while creating ML environment.. Try again..."
+        )
         raise
+
 
 def prepare_and_execute(
     subscription_id: str,
@@ -165,7 +195,7 @@ def prepare_and_execute(
     deploy_environment: str,
     build_reference: str,
     model_name: str,
-    output_file: str
+    output_file: str,
 ):
     compute = get_compute(
         subscription_id,
@@ -176,7 +206,7 @@ def prepare_and_execute(
         cluster_region,
         min_instances,
         max_instances,
-        idle_time_before_scale_down
+        idle_time_before_scale_down,
     )
 
     environment = get_environment(
@@ -186,7 +216,7 @@ def prepare_and_execute(
         env_base_image_name,
         conda_path,
         environment_name,
-        env_description
+        env_description,
     )
 
     print(f"Environment: {environment.name}, version: {environment.version}")
@@ -197,8 +227,7 @@ def prepare_and_execute(
         display_name,
         deploy_environment,
         build_reference,
-        model_name
-
+        model_name,
     )
 
     execute_pipeline(
@@ -208,30 +237,70 @@ def prepare_and_execute(
         experiment_name,
         pipeline_job,
         wait_for_completion,
-        output_file)
+        output_file,
+    )
+
 
 def main():
     parser = argparse.ArgumentParser("build_environment")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
-    parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
-    parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
-    parser.add_argument("--cluster_name", type=str, help="Azure Machine learning cluster name")
-    parser.add_argument("--cluster_size", type=str, help="Azure Machine learning cluster size")
-    parser.add_argument("--cluster_region", type=str, help="Azure Machine learning cluster region")
+    parser.add_argument(
+        "--resource_group_name", type=str, help="Azure Machine learning resource group"
+    )
+    parser.add_argument(
+        "--workspace_name", type=str, help="Azure Machine learning Workspace name"
+    )
+    parser.add_argument(
+        "--cluster_name", type=str, help="Azure Machine learning cluster name"
+    )
+    parser.add_argument(
+        "--cluster_size", type=str, help="Azure Machine learning cluster size"
+    )
+    parser.add_argument(
+        "--cluster_region", type=str, help="Azure Machine learning cluster region"
+    )
     parser.add_argument("--min_instances", type=int, default=0)
     parser.add_argument("--max_instances", type=int, default=4)
     parser.add_argument("--idle_time_before_scale_down", type=int, default=120)
-    parser.add_argument("--build_reference", type=str, help="Unique identifier for Azure DevOps pipeline run")
-    parser.add_argument("--deploy_environment", type=str, help="execution and deployment environment. e.g. dev, prod, test")
-    parser.add_argument("--experiment_name", type=str, help="Job execution experiment name")
+    parser.add_argument(
+        "--build_reference",
+        type=str,
+        help="Unique identifier for Azure DevOps pipeline run",
+    )
+    parser.add_argument(
+        "--deploy_environment",
+        type=str,
+        help="execution and deployment environment. e.g. dev, prod, test",
+    )
+    parser.add_argument(
+        "--experiment_name", type=str, help="Job execution experiment name"
+    )
     parser.add_argument("--display_name", type=str, help="Job execution run name")
-    parser.add_argument("--wait_for_completion", type=str, help="determine if pipeline to wait for job completion")
-    parser.add_argument("--environment_name", type=str, help="Azure Machine Learning Environment name for job execution")
-    parser.add_argument("--env_base_image_name", type=str, help="Environment custom base image name")
-    parser.add_argument("--conda_path", type=str, help="path to conda requirements file")
-    parser.add_argument("--env_description", type=str, default="Environment created using Conda.")
-    parser.add_argument("--model_name", type=str, default="Name used for registration of model")
-    parser.add_argument("--output_file", type=str, required=False, help="A file to save run id")
+    parser.add_argument(
+        "--wait_for_completion",
+        type=str,
+        help="determine if pipeline to wait for job completion",
+    )
+    parser.add_argument(
+        "--environment_name",
+        type=str,
+        help="Azure Machine Learning Environment name for job execution",
+    )
+    parser.add_argument(
+        "--env_base_image_name", type=str, help="Environment custom base image name"
+    )
+    parser.add_argument(
+        "--conda_path", type=str, help="path to conda requirements file"
+    )
+    parser.add_argument(
+        "--env_description", type=str, default="Environment created using Conda."
+    )
+    parser.add_argument(
+        "--model_name", type=str, default="Name used for registration of model"
+    )
+    parser.add_argument(
+        "--output_file", type=str, required=False, help="A file to save run id"
+    )
 
     args = parser.parse_args()
 
@@ -255,8 +324,9 @@ def main():
         args.deploy_environment,
         args.build_reference,
         args.model_name,
-        args.output_file
+        args.output_file,
     )
+
 
 if __name__ == "__main__":
     main()

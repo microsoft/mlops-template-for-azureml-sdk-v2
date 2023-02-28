@@ -34,15 +34,15 @@ def main(clean_data, transformed_data):
     final_df = transform_data(combined_df)
 
     # Output data
-    final_df.to_csv(
-        (Path(args.transformed_data) / "transformed_data.csv")
-    )
+    final_df.to_csv((Path(args.transformed_data) / "transformed_data.csv"))
+
 
 # These functions filter out coordinates for locations that are outside the city border.
 
 # Filter out coordinates for locations that are outside the city border.
 # Chain the column filter commands within the filter() function
 # and define the minimum and maximum bounds for each field
+
 
 def transform_data(combined_df):
     combined_df = combined_df.astype(
@@ -114,10 +114,8 @@ def transform_data(combined_df):
 
     normalized_df.reset_index(inplace=True, drop=True)
 
-
     print(normalized_df.head)
     print(normalized_df.dtypes)
-
 
     # Drop the pickup_date, dropoff_date, pickup_time, dropoff_time columns because they're
     # no longer needed (granular time features like hour,
@@ -128,7 +126,9 @@ def transform_data(combined_df):
     del normalized_df["dropoff_time"]
 
     # Change the store_forward column to binary values
-    normalized_df["store_forward"] = np.where((normalized_df.store_forward == "N"), 0, 1)
+    normalized_df["store_forward"] = np.where(
+        (normalized_df.store_forward == "N"), 0, 1
+    )
 
     # Before you package the dataset, run two final filters on the dataset.
     # To eliminate incorrectly captured data points,
@@ -141,6 +141,7 @@ def transform_data(combined_df):
     print(final_df.head)
 
     return final_df
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("transform")

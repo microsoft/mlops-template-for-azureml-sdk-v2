@@ -29,9 +29,8 @@ def main():
     conda_path = os.environ.get("CONDA_PATH")
 
     git_branch = subprocess.check_output(
-        "git rev-parse --abbrev-ref HEAD",
-        shell=True,
-        universal_newlines=True).strip()
+        "git rev-parse --abbrev-ref HEAD", shell=True, universal_newlines=True
+    ).strip()
     git_branch_items = git_branch.split("/")
     git_branch = git_branch_items[len(git_branch_items) - 1]
 
@@ -59,7 +58,7 @@ def main():
         experiment_name,
         deploy_environment,
         build_id,
-        None
+        None,
     )
 
 
