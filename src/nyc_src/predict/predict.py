@@ -18,7 +18,10 @@ def main(model_input, test_data, prediction_path):
 
     testX, testy = load_test_data(test_data)
     predict(testX, testy, model_input, prediction_path)
+
+
 # Load and split the test data
+
 
 def load_test_data(test_data):
     print("mounted_path files: ")
@@ -64,6 +67,7 @@ def load_test_data(test_data):
     print(testX.columns)
     return testX, testy
 
+
 def predict(testX, testy, model_input, prediction_path):
     # Load the model from input port
     model = pickle.load(open((Path(model_input) / "model.sav"), "rb"))
@@ -80,9 +84,9 @@ def predict(testX, testy, model_input, prediction_path):
     output_data = pd.DataFrame(testX)
     output_data["actual_cost"] = testy
 
-
     # Save the output data with feature columns, predicted cost, and actual cost in csv file
     output_data = output_data.to_csv((Path(prediction_path) / "predictions.csv"))
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("predict")
