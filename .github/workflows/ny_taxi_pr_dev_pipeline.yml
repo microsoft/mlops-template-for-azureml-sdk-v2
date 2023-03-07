@@ -9,6 +9,5 @@ on:
 
 jobs:
   validation:
-  - name: Execute Child Workflow
     uses: cse-labs/mlops-template-for-azureml-sdk-v2/.github/workflows/build_validation_pipeline.yml@ritesh/actionsimpl
 
