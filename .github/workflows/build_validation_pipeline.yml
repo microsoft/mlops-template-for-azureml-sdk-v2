@@ -1,11 +1,5 @@
 name: Build Validation
-on:
-  workflow_dispatch:
-    inputs:
-      exec_environment:
-        description: 'execution environment (dev, prod)'
-        required: true
-        default: "dev"
+on: [workflow_dispatch, workflow_call]
 jobs:
   build:
     runs-on: ubuntu-latest
