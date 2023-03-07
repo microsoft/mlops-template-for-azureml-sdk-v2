@@ -1,5 +1,5 @@
 name: Build Validation
-on: [workflow_dispatch, workflow_call]
+on: [push, workflow_dispatch, workflow_call]
 jobs:
   build:
     runs-on: ubuntu-latest
