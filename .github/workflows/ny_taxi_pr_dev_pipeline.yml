@@ -1,4 +1,4 @@
-name: Build Validation
+name: CI pipeline
 on:
   workflow_dispatch:
     inputs:
