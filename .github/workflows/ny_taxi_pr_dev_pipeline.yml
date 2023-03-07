@@ -1,0 +1,17 @@
+name: Build Validation
+on:
+  workflow_dispatch:
+    inputs:
+      exec_environment:
+        description: 'execution environment (dev, prod)'
+        required: true
+        default: "dev"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Execute Child Workflow
+      uses: cse-labs/mlops-template-for-azureml-sdk-v2/.github/workflows/build_validation_pipeline.yml
+
