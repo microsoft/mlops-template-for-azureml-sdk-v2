@@ -1,13 +1,8 @@
 name: CI pipeline
-on:
-  workflow_dispatch:
-    inputs:
-      exec_environment:
-        description: 'execution environment (dev, prod)'
-        required: true
-        default: "dev"
+on: ["push"]
+ 
 
 jobs:
-  validation:
+  validation_pipeline:
     uses: cse-labs/mlops-template-for-azureml-sdk-v2/.github/workflows/build_validation_pipeline.yml@ritesh/actionsimpl
 
