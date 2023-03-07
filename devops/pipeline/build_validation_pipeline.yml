@@ -16,7 +16,7 @@ jobs:
     displayName: "Lint with flake8"
 
   - script: |
-      pytest  --ignore=sandbox/ --junitxml=junit/test-results.xml
+      pytest  --ignore=sandbox/ --junitxml=junit/test-results.xml --cov=. --cov-report=xml
     displayName: 'Run Unit Tests'
     condition: succeededOrFailed()
 
