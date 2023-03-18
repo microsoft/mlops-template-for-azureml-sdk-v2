@@ -1,0 +1,71 @@
+name: NY Taxi PR Merge
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+    paths:
+      - .github/workflows/*
+      - mlops/common/*
+      - src/nyc_src/*
+      - mlops/nyc_taxi/*
+      - src/shared/*
+
+env:
+  exec_environment: dev
+  PIPELINE_TYPE: nyc
+
+
+jobs:
+  Execute_Job_Pipeline:
+    name: Execute_Job_Pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Retrieve Azure Service Connection
+        uses: azure/cli@v1
+        with:
+          inlineScript: |
+            echo "SUBSCRIPTION_ID=$(az account show --query id -o tsv)" >> $GITHUB_ENV
+            echo "TENANT_ID=$tenantId" >> $GITHUB_ENV
+            echo "MODEL_NAME=$PIPELINE_TYPE_${{ vars.MODEL_BASE_NAME }}_${{ env.exec_environment }}_${{ github.ref }}" >> $GITHUB_ENV
+             echo "DISPLAY_NAME=${{ vars.DISPLAY_BASE_NAME }}_${{ env.exec_environment }}_${{ github.run_id }}" >> $GITHUB_ENV
+            echo "EXPERIMENT_NAME=$PIPELINE_TYPE_${{ vars.EXPERIMENT_BASE_NAME }}_${{ env.exec_environment }}_${{ github.run_id }}" >> $GITHUB_ENV
+      - name: configure azureml runner
+        uses: azure/cli@v1
+        with:
+          inlineScript: |
+            set -e # fail on error
+            python -m pip install --upgrade pip
+            pip install -r devops/pipeline/requirements/execute_job_requirements.txt
+            az version
+      - name: configure mlops pipeline
+        uses: azure/cli@v1
+        with:
+          inlineScript: |
+            python -m mlops.nyc_taxi.src.mlops_pipeline \
+              --subscription_id $SUBSCRIPTION_ID \
+              --resource_group_name ${{ vars.RESOURCE_GROUP_NAME }} \
+              --workspace_name ${{ vars.WORKSPACE_NAME }} \
+              --cluster_name ${{ vars.CLUSTER_NAME }} \
+              --cluster_size ${{ vars.CLUSTER_SIZE }} \
+              --cluster_region ${{ vars.CLUSTER_REGION }} \
+              --build_reference ${{ github.run_id }} \
+              --deploy_environment ${{ env.exec_environment}} \
+              --experiment_name $EXPERIMENT_NAME) \
+              --display_name $DISPLAY_NAME) \
+              --wait_for_completion False \
+              --environment_name ${{ vars.ENVIRONMENT_NAME }} \
+              --env_base_image_name ${{ vars.ENV_BASE_IMAGE_NAME }} \
+              --model_name $MODEL_NAME \
+              --conda_path ${{ vars.CONDA_PATH }} \
+              --output_file run_id.txt
