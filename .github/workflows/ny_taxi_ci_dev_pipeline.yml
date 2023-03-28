@@ -12,7 +12,7 @@ on:
     paths:
       - .github/workflows/*
       - mlops/*
-      - src//*
+      - src/*
       - test/*
   push:
     branches:
@@ -20,7 +20,7 @@ on:
     paths:
       - .github/workflows/*
       - mlops/*
-      - src//*
+      - src/*
       - test/*
 
 env:
