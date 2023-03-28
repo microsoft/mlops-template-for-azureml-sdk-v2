@@ -46,7 +46,7 @@ jobs:
           inlineScript: |
             echo "SUBSCRIPTION_ID=$(az account show --query id -o tsv)" >> $GITHUB_ENV
             echo "TENANT_ID=$tenantId" >> $GITHUB_ENV
-            echo "MODEL_NAME=${{ env.PIPELINE_TYPE }}_${{ vars.MODEL_BASE_NAME }}_${{ env.exec_environment }}_${{ github.run_id }}" >> $GITHUB_ENV
+            echo "MODEL_NAME=${{ env.PIPELINE_TYPE }}_${{ vars.MODEL_BASE_NAME }}_${{ env.exec_environment }}_${{ github.ref_name }}" >> $GITHUB_ENV
             echo "DISPLAY_NAME=${{ vars.DISPLAY_BASE_NAME }}_${{ env.exec_environment }}_${{ github.run_id }}" >> $GITHUB_ENV
             echo "EXPERIMENT_NAME=${{ env.PIPELINE_TYPE }}_${{ vars.EXPERIMENT_BASE_NAME }}_${{ env.exec_environment }}_${{ github.run_id }}" >> $GITHUB_ENV
       - name: configure mlops pipeline

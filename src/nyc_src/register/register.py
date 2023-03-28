@@ -16,11 +16,6 @@ def main(model_metadata, model_name, score_report, build_reference):
         cod = score_data["cod"]
         mse = score_data["mse"]
         coff = score_data["coff"]
-        print(run_uri)
-        print(model_name)
-        print(cod)
-        print(mse)
-        print(coff)
 
         model_version = mlflow.register_model(run_uri, model_name)
 
@@ -65,10 +60,5 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-
-    print(args.model_metadata)
-    print(args.model_name)
-    print(args.score_report)
-    print(args.build_reference)
 
     main(args.model_metadata, args.model_name, args.score_report, args.build_reference)
