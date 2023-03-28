@@ -6,10 +6,11 @@
 
 ## About this repo
 
-The idea of this template is to provide a minimum number of scripts to implement development environment to train new models using Azure ML SDK v2 and Azure DevOps.
+The idea of this template is to provide a minimum number of scripts to implement development environment to train new models using Azure ML SDK v2 With Azure DevOps or Github Actions.
 
 The template contains the following folders/files:
 
+- .github: the folder contains Github Workflow related files(yaml files to define the Builds).
 - devops: the folder contains Azure DevOps related files (yaml files to define Builds).
 - docs: documentation.
 - src: source code that is not related to Azure ML directly. Usually, there is data science related code.

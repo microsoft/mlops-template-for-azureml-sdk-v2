@@ -1,26 +1,21 @@
 name: NY Taxi PR Merge
-
 on:
-  pull_request:
+  push:
     branches:
-      - main
-      - dev
-      - release
-    types:
-      - opened
-      - edited
+      - featurebranch
     paths:
       - .github/workflows/*
       - mlops/*
       - src//*
       - test/*
 
-
 env:
   exec_environment: dev
   PIPELINE_TYPE: nyc
 
 jobs:
+  Build_validation: 
+    uses: ./.github/workflows/build_validation_pipeline.yml
   Execute_Job_Pipeline:
     name: Execute_Job_Pipeline
     runs-on: ubuntu-latest
