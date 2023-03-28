@@ -16,6 +16,11 @@ def main(model_metadata, model_name, score_report, build_reference):
         cod = score_data["cod"]
         mse = score_data["mse"]
         coff = score_data["coff"]
+        print(run_uri)
+        print(model_name)
+        print(cod)
+        print(mse)
+        print(coff)
 
         model_version = mlflow.register_model(run_uri, model_name)
 
