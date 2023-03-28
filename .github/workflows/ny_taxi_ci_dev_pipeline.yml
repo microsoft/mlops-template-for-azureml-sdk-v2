@@ -14,7 +14,12 @@ on:
       - mlops/*
       - src//*
       - test/*
-
+  push:
+    paths:
+      - .github/workflows/*
+      - mlops/*
+      - src//*
+      - test/*
 
 env:
   exec_environment: dev
