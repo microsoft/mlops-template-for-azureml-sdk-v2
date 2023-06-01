@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspaces_arm_templetes_example_001_name": {
+            "value": null
+        },
+        "storageAccounts_armtempletesexample7842161561_externalid": {
+            "value": null
+        },
+        "vaults_armtempletesexample7504836798_externalid": {
+            "value": null
+        },
+        "components_armtempletesexample9847530502_externalid": {
+            "value": null
+        },
+        "registries_armtempletesexample001_externalid": {
+            "value": null
+        }
+    }
+}
