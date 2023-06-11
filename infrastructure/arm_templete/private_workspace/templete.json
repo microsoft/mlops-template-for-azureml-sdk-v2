@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_vn_dev_a1a_001_name": {
+            "value": null
+        },
+        "vaults_armtempletesex7504836798_name": {
+            "value": null
+        },
+        "bastionHosts_vn_dev_a1a_001_Bastion_name": {
+            "value": null
+        },
+        "components_armtempletesex9847530502_name": {
+            "value": null
+        },
+        "privateEndpoints_pe_mlops_dev_westus_001_name": {
+            "value": null
+        },
+        "storageAccounts_armtempletesex7842161561_name": {
+            "value": null
+        },
+        "privateDnsZones_privatelink_api_azureml_ms_name": {
+            "value": null
+        },
+        "registries_armtempletesexample001_name": {
+            "value": null
+        },
+        "networkInterfaces_pe_mlops_dev_westus_001_nic_name": {
+            "value": null
+        },
+        "privateDnsZones_privatelink_notebooks_azure_net_name": {
+            "value": null
+        },
+        "workspaces_arm_templetes_example_001_name": {
+            "value": null
+        },
+        "publicIPAddresses_vn_dev_a1a_001_bastion_publicIpAddress_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___armtempletesex9847530502_name": {
+            "value": null
+        },
+        "actiongroups_application_insights_smart_detection_externalid": {
+            "value": null
+        },
+        "workspaces_defaultworkspace_0b3f04a9_6375_4341_a513_dd53731a99a4_wus2_externalid": {
+            "value": null
+        },
+        "workspaces_amlmlopsdevtmpl_externalid": {
+            "value": null
+        }
+    }
+}
