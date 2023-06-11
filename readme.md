@@ -1,12 +1,27 @@
-# Infrastructure as Code (IaC)
-Contained within this directory you will find infrastructure as code for the MLOps V2. The code comes in three different formats:
-- ARM Templates
-- Bicep Templates
-- Terraform Templates
+# MLOps Template for Azure ML SDK v2
 
-Within each format you can also find a public IP version of the code and a private IP version of the code.
+> **Note:**
+> This is a repo that can be shared to our customers. This means it's NOT OK to include Microsoft confidential
+> content. All discussions should be appropriate for a public audience.
 
-# SetUp
-Depending on which format you want each directory has its own set up installation instructions. Just follow the read me in each directory to deploy your IaC into your Resource Group in Azure.
+## About this repo
 
-# Example
+The idea of this template is to provide a minimum number of scripts to implement development environment to train new models using Azure ML SDK v2 With Azure DevOps or Github Actions.
+
+The template contains the following folders/files:
+
+- .github: the folder contains Github Workflow related files(yaml files to define the Builds).
+- devops: the folder contains Azure DevOps related files (yaml files to define Builds).
+- docs: documentation.
+- src: source code that is not related to Azure ML directly. Usually, there is data science related code.
+- mlops: scripts that are related to Azure ML.
+- mlops/nyc-taxi: a fake pipeline with some basic code.
+- .amlignore: using this file we are removing all the folders and files that are not supposed to be in Azure ML compute.
+
+The template contains the following documents:
+
+- docs/how_to_setup.md: explain how to configure the template.
+
+## How to use the repo
+
+Information about how to setup the repo is in [the following document](./docs/how_to_setup.md).
