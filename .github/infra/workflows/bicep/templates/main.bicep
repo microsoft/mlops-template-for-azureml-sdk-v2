@@ -83,4 +83,4 @@ module appInsightsResource './modules/appinsights.template.bicep' = {
     containerRegistryName: containerRegistryResource.name
     location: location
   }
-} 
+}
