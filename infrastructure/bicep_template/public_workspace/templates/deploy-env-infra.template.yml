@@ -27,9 +27,9 @@ jobs:
   - task: CopyFiles@2
     displayName: 'Copy templates'
     inputs:
-      sourceFolder: '$(Pipeline.Workspace)/s/infrastructure/bicep_template/*'
+      sourceFolder: '$(Pipeline.Workspace)/s/infrastructure/bicep_template'
       targetFolder: '$(Build.ArtifactStagingDirectory)'
-    enabled: false
+    enabled: true
 
   - script: |
       echo $(Pipeline.Workspace)
