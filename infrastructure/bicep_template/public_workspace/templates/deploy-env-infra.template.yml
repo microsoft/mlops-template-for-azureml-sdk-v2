@@ -37,9 +37,9 @@ jobs:
     enabled: true      
 
   - script: |
-    echo $(Build.ArtifactStagingDirectory)
-    ls $(Build.ArtifactStagingDirectory)/s
-  enabled: true   
+      echo $(Build.ArtifactStagingDirectory)
+      ls $(Build.ArtifactStagingDirectory)/s
+    enabled: true   
 
   - publish: '$(Build.ArtifactStagingDirectory)'
     artifact: infratemplates 
