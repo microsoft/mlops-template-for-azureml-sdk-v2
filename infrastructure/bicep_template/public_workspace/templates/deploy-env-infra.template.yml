@@ -34,12 +34,12 @@ jobs:
   - script: |
       echo $(Pipeline.Workspace)
       ls $(Pipeline.Workspace)/s/infrastructure
-    enabled: true      
+    enabled: false      
 
   - script: |
       echo $(Build.ArtifactStagingDirectory)
       ls $(Build.ArtifactStagingDirectory)
-    enabled: true   
+    enabled: false   
 
   - publish: '$(Build.ArtifactStagingDirectory)'
     artifact: infratemplates 
@@ -48,14 +48,14 @@ jobs:
   - script: |
       echo $(Build.ArtifactStagingDirectory)
       ls $(Build.ArtifactStagingDirectory)
-    enabled: true      
+    enabled: false      
 
 - deployment: ml_env_deployment
   displayName: 'ML Environment Deployment'
   environment: '${{parameters.environmentName}}'  
   dependsOn: iac_build
   variables:
-    templateFile: '$(Pipeline.Workspace)/infratemplates/azure-pipelines/templates/main.bicep'
+    templateFile: 'infratemplates/public-workspace/templates/main.bicep'
 
   strategy:
     runOnce:
@@ -75,7 +75,7 @@ jobs:
             echo '${{parameters.storageAccount}}'            
             echo $PWD
             echo $(Pipeline.Workspace)
-            ls $(Pipeline.Workspace)/infratemplates/azure-pipelines/templates
+            ls infratemplates/public_workspace/templates
           enabled: true                            
 
         - task: AzureCLI@2
