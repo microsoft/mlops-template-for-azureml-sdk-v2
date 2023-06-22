@@ -13,12 +13,12 @@ pr:
     - develop
   paths:
     include:
-    - infrastructure/bicep_template/public_workspace/configuration/configuration-infra-DEV.variables.yml
+    - ../configuration/configuration-infra-DEV.variables.yml
     - infrastructure/bicep_template/public_workspace/PIPELINE-0-setup.yml
 
 
 variables:
-- template: infrastructure/bicep_template/public_workspace/configuration/configuration-infra-DEV.variables.yml # DEV as default env
+- template: ../configuration/configuration-infra-DEV.variables.yml # DEV as default env
 
 pool:
   vmImage: 'ubuntu latest'
@@ -33,9 +33,9 @@ stages:
 - stage: deployinfra_dev
   displayName: 'Deploy DEV Environment'
   variables:
-  - template: infrastructure/bicep_template/public_workspace/configuration/configuration-infra-DEV.variables.yml
+  - template: ../configuration/configuration-infra-DEV.variables.yml
   jobs:
-  - template: infrastructure/bicep_template/public_workspace/templates/deploy-env-infra.template.yml
+  - template: ../templates/deploy-env-infra.template.yml
     parameters:
       environmentName: $(ENVIRONMENT)
       azureMgrConnection: $(SERVICECONNECTION_RG)
