@@ -34,7 +34,7 @@ jobs:
 
 - deployment: ml_env_deployment
   displayName: 'ML Environment Deployment'
-  environment: 'Bicep-${{parameters.environmentName}}'  
+  environment: '${{parameters.environmentName}}'  
   dependsOn: iac_build
   variables:
     templateFile: '$(Pipeline.Workspace)/infratemplates/azure-pipelines/templates/main.bicep'
