@@ -27,7 +27,7 @@ jobs:
   - task: CopyFiles@2
     displayName: 'Copy templates'
     inputs:
-      sourceFolder: 'bicep_mlops'
+      sourceFolder: 'templates'
       targetFolder: '$(Build.ArtifactStagingDirectory)'
   - publish: '$(Build.ArtifactStagingDirectory)'
     artifact: infratemplates    
