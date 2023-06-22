@@ -75,7 +75,7 @@ jobs:
             echo '${{parameters.storageAccount}}'            
             echo $PWD
             echo $(Pipeline.Workspace)
-            ls $PWD
+            ls $(Pipeline.Workspace)/s
           enabled: true                            
 
         - task: AzureCLI@2
@@ -89,4 +89,4 @@ jobs:
               az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file 'main.bicep' \
               --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
               appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}}'
-          enabled: true         
+          enabled: false         
