@@ -74,12 +74,12 @@ jobs:
             echo '${{parameters.variablesTemplateBase}}'
             echo '${{parameters.storageAccount}}'            
             ls $(Pipeline.Workspace)/s
-          enabled: true                            
+          enabled: false                            
 
-      - script: |
-          echo 'See the contents of $(Pipeline.Workspace)/s'           
-          ls $(Pipeline.Workspace)/s
-        enabled: true  
+        - script: |
+            echo 'See the contents of $(Pipeline.Workspace)/s'           
+            ls $(Pipeline.Workspace)/s
+          enabled: true  
 
         - task: AzureCLI@2
           inputs:
