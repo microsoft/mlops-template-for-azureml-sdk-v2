@@ -29,11 +29,11 @@ jobs:
     inputs:
       sourceFolder: '$(Pipeline.Workspace)/s/infrastructure/bicep_template/*'
       targetFolder: '$(Build.ArtifactStagingDirectory)'
-    enabled: true
+    enabled: false
 
   - script: |
       echo $(Pipeline.Workspace)
-      ls $(Pipeline.Workspace)/s/infrastructure/bicep_template/
+      ls $(Pipeline.Workspace)/s/infrastructure
     enabled: true      
 
   - script: |
