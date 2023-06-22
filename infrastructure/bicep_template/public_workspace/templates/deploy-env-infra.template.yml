@@ -40,9 +40,9 @@ jobs:
     artifact: infratemplates 
 
   - script: |
-    echo $(Build.ArtifactStagingDirectory)
-    ls $(Build.ArtifactStagingDirectory)
-  enabled: true      
+      echo $(Build.ArtifactStagingDirectory)
+      ls $(Build.ArtifactStagingDirectory)
+    enabled: true      
 
 - deployment: ml_env_deployment
   displayName: 'ML Environment Deployment'
