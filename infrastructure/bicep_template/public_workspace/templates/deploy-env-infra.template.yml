@@ -55,7 +55,7 @@ jobs:
   environment: '${{parameters.environmentName}}'  
   dependsOn: iac_build
   variables:
-    templateFile: 'infratemplates/bicep_template/public-workspace/templates/main.bicep'
+    templateFile: 'infratemplates/public-workspace/templates/main.bicep'
 
   strategy:
     runOnce:
