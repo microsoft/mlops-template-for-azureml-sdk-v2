@@ -37,18 +37,18 @@ jobs:
     enabled: true      
 
   - script: |
-    echo $(Pipeline.Workspace)
-    ls $(Pipeline.Workspace)/s
+    echo $(Build.ArtifactStagingDirectory)
+    ls $(Build.ArtifactStagingDirectory)/s
   enabled: true   
 
   - publish: '$(Build.ArtifactStagingDirectory)'
     artifact: infratemplates 
-    enabled: false
+    enabled: true
 
   - script: |
       echo $(Build.ArtifactStagingDirectory)
       ls $(Build.ArtifactStagingDirectory)
-    enabled: false      
+    enabled: true      
 
 - deployment: ml_env_deployment
   displayName: 'ML Environment Deployment'
