@@ -55,7 +55,7 @@ jobs:
   environment: '${{parameters.environmentName}}'  
   dependsOn: iac_build
   variables:
-    templateFile: 'infratemplates/public-workspace/templates/main.bicep'
+    templateFile: '$(Pipeline.Workspace)/infratemplates/public_workspace/templates/main.bicep'
 
   strategy:
     runOnce:
@@ -89,7 +89,7 @@ jobs:
             useGlobalConfig: false
             inlineScript: |
               az --version
-              az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file 'main.bicep' \
+              az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) \
               --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
               appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}}'
-          enabled: false         
+          enabled: true       
