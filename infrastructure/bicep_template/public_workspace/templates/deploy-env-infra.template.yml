@@ -73,8 +73,6 @@ jobs:
             echo '${{parameters.location}}'
             echo '${{parameters.variablesTemplateBase}}'
             echo '${{parameters.storageAccount}}'            
-            echo $PWD
-            echo $(Pipeline.Workspace)
             ls $(Pipeline.Workspace)/s
           enabled: true                            
 
