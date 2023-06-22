@@ -29,7 +29,7 @@ jobs:
     inputs:
       sourceFolder: 'templates'
       targetFolder: '$(Build.ArtifactStagingDirectory)'
-    enabled: true
+    enabled: false
   - script: |
       echo $(Pipeline.Workspace)
       ls $(Pipeline.Workspace)
@@ -38,11 +38,12 @@ jobs:
     
   - publish: '$(Build.ArtifactStagingDirectory)'
     artifact: infratemplates 
+    enabled: false
 
   - script: |
       echo $(Build.ArtifactStagingDirectory)
       ls $(Build.ArtifactStagingDirectory)
-    enabled: true      
+    enabled: false      
 
 - deployment: ml_env_deployment
   displayName: 'ML Environment Deployment'
