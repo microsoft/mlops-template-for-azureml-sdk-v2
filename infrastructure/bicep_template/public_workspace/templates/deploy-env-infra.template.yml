@@ -32,7 +32,7 @@ jobs:
     enabled: false
   - script: |
       echo $(Pipeline.Workspace)
-      ls $(Pipeline.Workspace)
+      ls $(Pipeline.Workspace)/s
     enabled: true      
 
     
@@ -71,7 +71,7 @@ jobs:
             echo $PWD
             echo $(Pipeline.Workspace)
             ls $(Pipeline.Workspace)/infratemplates/azure-pipelines/templates
-          enabled: false                            
+          enabled: true                            
 
         - task: AzureCLI@2
           inputs:
@@ -83,4 +83,5 @@ jobs:
               az --version
               az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file '$(templateFile)' \
               --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
-              appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}}'         
+              appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}}'
+          enabled: false         
