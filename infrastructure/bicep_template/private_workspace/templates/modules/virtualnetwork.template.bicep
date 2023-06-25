@@ -34,15 +34,4 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
       }
     ]
   }
-
-  resource subnet1 'subnets' existing = {
-    name: publicSubnetName
-  }
-
-  resource privateSubnetName 'subnets' existing = {
-    name: subnet2Name
-  }
 }
-
-output subnet1ResourceId string = virtualNetwork::subnet1.id
-output subnet2ResourceId string = virtualNetwork::subnet2.id
