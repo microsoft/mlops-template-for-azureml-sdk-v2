@@ -31,7 +31,7 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-08-01' = {
           properties: {
             privateLinkServiceId: workspace.id
             groupIds: [
-              'mlworkspace']
+              'amlworkspace']
           }
         }
       ]
