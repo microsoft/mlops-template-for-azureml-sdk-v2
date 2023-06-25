@@ -132,6 +132,7 @@ module privateDnsZone './modules/privatednszone.template.bicep' = {
   name: privateDnsZoneNameUniqueified
   params: {
     location: location
+    privateDnsZoneName: privateDnsZoneNameUniqueified
     privateEndpoint: privateEndpoint.name
   }
   dependsOn: [
