@@ -99,6 +99,7 @@ module appInsightsResource './modules/appinsights.template.bicep' = {
   name: virtualNetworkNameUniqueified
   params: {
     location: location
+    virtualNetworkName: virtualNetworkNameUniqueified
   }
 }
 
@@ -121,7 +122,7 @@ module privateEndpoint './modules/privateendpoint.template.bicep' = {
   params: {
     location: location
     virtualNetworkName: vnet.name
-    mlworkspaceName: mlworkspace.name
+    amlWorkspaceName: mlworkspace.name
   }
 }
 
@@ -139,12 +140,11 @@ module privateDnsZone './modules/privatednszone.template.bicep' = {
 
 // private dns zone link
 module privateDnsZoneLink './modules/privatednsvnetlink.template.bicep' = {
-  parent: privateDnsZone
   name: privateDnsZoneLinkNameUniqueified
   params: {
     location: location
     virtualNetworkName: vnet.name
-    mlworkspaceName: mlworkspace.name
+    privateDnsZoneName: privateDnsZone.name
   }
 }
 
@@ -153,7 +153,7 @@ module privateDnsZoneGroup './modules/privatednszonegroup.template.bicep' = {
   name: privateDnsZoneGroupNameUniqueified
   params: {
     location: location
-    virtualNetworkName: vnet.name
-    mlworkspaceName: mlworkspace.name
+    privateDnsZoneName: privateDnsZone.name
+    privateEndpointName: privateEndpoint.name
   }
 }
