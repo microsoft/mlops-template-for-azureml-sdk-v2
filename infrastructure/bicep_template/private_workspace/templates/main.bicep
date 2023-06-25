@@ -152,7 +152,6 @@ module privateDnsZoneLink './modules/privatednsvnetlink.template.bicep' = {
 module privateDnsZoneGroup './modules/privatednszonegroup.template.bicep' = {
   name: privateDnsZoneGroupNameUniqueified
   params: {
-    location: location
     privateDnsZoneName: privateDnsZone.name
     privateEndpointName: privateEndpoint.name
   }
