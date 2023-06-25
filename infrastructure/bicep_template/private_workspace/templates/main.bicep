@@ -121,6 +121,7 @@ module privateEndpoint './modules/privateendpoint.template.bicep' = {
   name: privateEndpointNameUniqueified
   params: {
     location: location
+    privateEndpointName: privateEndpointNameUniqueified
     virtualNetworkName: vnet.name
     amlWorkspaceName: mlworkspace.name
   }
@@ -143,6 +144,7 @@ module privateDnsZoneLink './modules/privatednsvnetlink.template.bicep' = {
   name: privateDnsZoneLinkNameUniqueified
   params: {
     location: location
+    privateDnsLinkName: privateDnsZoneLinkNameUniqueified
     virtualNetworkName: vnet.name
     privateDnsZoneName: privateDnsZone.name
   }
@@ -153,6 +155,7 @@ module privateDnsZoneGroup './modules/privatednszonegroup.template.bicep' = {
   name: privateDnsZoneGroupNameUniqueified
   params: {
     privateDnsZoneName: privateDnsZone.name
+    privateDnsZoneGroupName: privateDnsZoneGroupNameUniqueified
     privateEndpointName: privateEndpoint.name
   }
 }
