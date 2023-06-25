@@ -92,6 +92,7 @@ jobs:
           enabled: true  
 
         - task: AzureCLI@2
+          displayName: 'Deploy private azure machine learning workspace'
           inputs:
             azureSubscription: '${{parameters.azureMgrConnection}}'
             scriptType: bash
