@@ -51,7 +51,7 @@ var virtualNetworkNameUniqueified = '${virtualNetworkName}${resourceGroupIdUniqu
 var privateDnsZoneNameUniqueified = '${privateDnsZoneName}${resourceGroupIdUniqueified}'
 var privateDnsZoneLinkNameUniqueified = '${privateDnsZoneLinkName}${resourceGroupIdUniqueified}'
 var privateDnsZoneGroupNameUniqueified = '${privateDnsZoneGroupName}${resourceGroupIdUniqueified}'
-var privateEndpointNameUniqueified = '${privateDnsZoneGroupName}${resourceGroupIdUniqueified}'
+var privateEndpointNameUniqueified = '${privateEndpointName}${resourceGroupIdUniqueified}'
 
 // storage
 module stg './modules/storage.template.bicep' = {

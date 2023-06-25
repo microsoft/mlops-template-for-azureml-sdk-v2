@@ -29,7 +29,4 @@ resource privateDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneG
         }
       ]
     }
-    dependsOn: [
-      privateEndpoint
-    ]
   }
