@@ -3,14 +3,9 @@
 
 # Pipeline that deploys the infrastructure and sets up compute & data in the AML workspace
 
-name: Provision MLOps Environment
-on: push
+trigger:
+- none
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps
 pr:
   branches:
     include:
@@ -18,12 +13,12 @@ pr:
     - develop
   paths:
     include:
-    - configuration/configuration-infra-DEV.variables.yml
-    - azure-pipelines/PIPELINE-0-setup.yml
+    - ../public_workspace/configuration/configuration-infra-DEV.variables.yml
+    - infrastructure/bicep_template/public_workspace/PIPELINE-0-setup.yml
 
 
 variables:
-- template: ../configuration/configuration-infra-DEV.variables.yml # DEV as default env
+- template: ../public_workspace/configuration/configuration-infra-DEV.variables.yml # DEV as default env
 
 pool:
   vmImage: 'ubuntu latest'
@@ -38,9 +33,9 @@ stages:
 - stage: deployinfra_dev
   displayName: 'Deploy DEV Environment'
   variables:
-  - template: ../configuration/configuration-infra-DEV.variables.yml
+  - template: /infrastructure/bicep_template/public_workspace/configuration/configuration-infra-DEV.variables.yml
   jobs:
-  - template: ../azure-pipelines/templates/deploy-env-infra.template.yml
+  - template: ../public_workspace/templates/deploy-env-infra.template.yml
     parameters:
       environmentName: $(ENVIRONMENT)
       azureMgrConnection: $(SERVICECONNECTION_RG)
