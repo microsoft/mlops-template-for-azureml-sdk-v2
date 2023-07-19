@@ -20,8 +20,8 @@ name: privateDnsZoneName
 
 resource privateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
     parent: privateDnsZone
-    name: privateDnsLinkName
-    location: location
+    name: '${privateDnsZoneName}-link' 
+    location: 'global'
     properties: {
       registrationEnabled: false
       virtualNetwork: {

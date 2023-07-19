@@ -1,21 +1,18 @@
-@description('The location into which your Azure resources should be deployed.')
-param location string
-
 @description('name for the private dns zone resource')
 param privateDnsZoneName string
 
-@description('Name of the private endpoint resource.')
-param privateEndpoint string
+@description('Name of the virtual network resource.')
+param virtualNetworkName string
 
-resource pe 'Microsoft.Network/privateEndpoints@2021-08-01' existing = {
-    name: privateEndpoint
+resource vnet 'Microsoft.Network/virtualNetworks@2019-11-01' existing = {
+    name: virtualNetworkName
   }
 
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
     name: privateDnsZoneName
-    location: location
+    location: 'global'
     properties: {}
         dependsOn: [
-        pe
+        vnet
     ]    
   }

@@ -7,8 +7,8 @@ variables:
 
   # DEV Environment
   ENVIRONMENT: DEV
-  RESOURCE_GROUP: rg-pvt-mlops-sdkv2-bicep-test
-  LOCATION: eastus
+  RESOURCE_GROUP: rg-pvtws-mlops-sdkv2-bicep-test
+  LOCATION: westus2
   NAMESPACE: mlopsdevtmpl
   SERVICECONNECTION_RG: sdk2deploymenttest
   SERVICECONNECTION_WS: sdk2deploymenttest
@@ -18,7 +18,7 @@ variables:
   APPINSIGHTS: ai$(NAMESPACE)
   CONTAINERREGISTRY: cr$(NAMESPACE)
   VIRTUALNETWORK: vnet$(NAMESPACE)
-  PRIVATEDNSZONE: pdz$(NAMESPACE)
-  PRIVATEDNSZONELINK: pdzl$(NAMESPACE)
+  PRIVATEDNSZONE: privatednszone.api.azureml.ms
+  PRIVATEDNSZONELINK: privatednszonelink.api.azureml.ms
   PRIVATEDNSZONEGROUP: pdzg$(NAMESPACE)
   PRIVATEENDPOINT: pe$(NAMESPACE)

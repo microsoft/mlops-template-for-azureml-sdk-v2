@@ -48,9 +48,9 @@ var appInsightsNameUniqueified = '${appInsightsName}${resourceGroupIdUniqueified
 var containerRegistryNameUniqueified = '${containerRegistryName}${resourceGroupIdUniqueified}'
 var amlWorkspaceNameUniqueified = '${amlWorkspaceName}${resourceGroupIdUniqueified}'
 var virtualNetworkNameUniqueified = '${virtualNetworkName}${resourceGroupIdUniqueified}'
-var privateDnsZoneNameUniqueified = '${privateDnsZoneName}${resourceGroupIdUniqueified}'
-var privateDnsZoneLinkNameUniqueified = '${privateDnsZoneLinkName}${resourceGroupIdUniqueified}'
-var privateDnsZoneGroupNameUniqueified = '${privateDnsZoneGroupName}${resourceGroupIdUniqueified}'
+// var privateDnsZoneNameUniqueified = '${privateDnsZoneName}${resourceGroupIdUniqueified}'
+// var privateDnsZoneLinkNameUniqueified = '${privateDnsZoneLinkName}${resourceGroupIdUniqueified}'
+// var privateDnsZoneGroupNameUniqueified = '${privateDnsZoneGroupName}${resourceGroupIdUniqueified}'
 var privateEndpointNameUniqueified = '${privateEndpointName}${resourceGroupIdUniqueified}'
 
 // storage
@@ -129,11 +129,10 @@ module privateEndpoint './modules/privateendpoint.template.bicep' = {
 
 // private dns zone
 module privateDnsZone './modules/privatednszone.template.bicep' = {
-  name: privateDnsZoneNameUniqueified
+  name: privateDnsZoneName
   params: {
-    location: location
-    privateDnsZoneName: privateDnsZoneNameUniqueified
-    privateEndpoint: privateEndpoint.name
+    privateDnsZoneName: privateDnsZoneName
+    virtualNetworkName: vnet.name
   }
   dependsOn: [
     privateEndpoint
@@ -142,10 +141,10 @@ module privateDnsZone './modules/privatednszone.template.bicep' = {
 
 // private dns zone link
 module privateDnsZoneLink './modules/privatednsvnetlink.template.bicep' = {
-  name: privateDnsZoneLinkNameUniqueified
+  name: privateDnsZoneLinkName
   params: {
     location: location
-    privateDnsLinkName: privateDnsZoneLinkNameUniqueified
+    privateDnsLinkName: privateDnsZoneLinkName
     virtualNetworkName: vnet.name
     privateDnsZoneName: privateDnsZone.name
   }
@@ -153,10 +152,10 @@ module privateDnsZoneLink './modules/privatednsvnetlink.template.bicep' = {
 
 // private dns zone group
 module privateDnsZoneGroup './modules/privatednszonegroup.template.bicep' = {
-  name: privateDnsZoneGroupNameUniqueified
+  name: privateDnsZoneGroupName
   params: {
     privateDnsZoneName: privateDnsZone.name
-    privateDnsZoneGroupName: privateDnsZoneGroupNameUniqueified
+    privateDnsZoneGroupName: privateDnsZoneGroupName
     privateEndpointName: privateEndpoint.name
   }
 }
