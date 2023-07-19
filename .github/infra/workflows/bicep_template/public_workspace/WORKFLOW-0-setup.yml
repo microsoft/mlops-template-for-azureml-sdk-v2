@@ -1,68 +1,38 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-# Pipeline that deploys the infrastructure and sets up compute & data in the AML workspace
+# Workflow that deploys the infrastructure and sets up compute & data in the AML workspace
 
-trigger:
-- none
+on: workflow_dispatch
 
-pr:
-  branches:
-    include:
-    - main
-    - develop
-  paths:
-    include:
-    - ../public_workspace/configuration/configuration-infra-DEV.variables.yml
-    - infrastructure/bicep_template/public_workspace/PIPELINE-0-setup.yml
+env: 
+  azureMgrConnection: 'sdk2deploymenttest'
+  environmentName: 'DEV'
+  resourceGroup: 'rg-pvtws-mlops-sdkv2-bicep-test'
+  location: 'west us 2'
 
-
-variables:
-- template: ../public_workspace/configuration/configuration-infra-DEV.variables.yml # DEV as default env
-
-pool:
-  vmImage: 'ubuntu latest'
-
-stages:
 
 ####################
 ##  DEPLOY INFRA  ##
 ####################
+jobs: 
+  name: deployinfra_dev
+  runs-on: ubuntu-latest
+  steps:
+    - name: 'Copy templates'
+    - uses: actions/checkout@v2
 
-# Deploy DEV Environment
-- stage: deployinfra_dev
-  displayName: 'Deploy DEV Environment'
-  variables:
-  - template: /infrastructure/bicep_template/public_workspace/configuration/configuration-infra-DEV.variables.yml
-  jobs:
-  - template: ../public_workspace/templates/deploy-env-infra.template.yml
-    parameters:
-      environmentName: $(ENVIRONMENT)
-      azureMgrConnection: $(SERVICECONNECTION_RG)
-      resourceGroup: $(RESOURCE_GROUP)
-      location: $(LOCATION)
-      variablesTemplateBase: '${{variables.template}}'
-      storageAccount: $(STORAGEACCOUNT)
-      keyVaultName: $(KEYVAULT)
-      appInsightsName: $(APPINSIGHTS)
-      containerRegistryName: $(CONTAINERREGISTRY)
-      amlWorkspaceName: $(AMLWORKSPACE)
-
-# Deploy PRD Environment
-# - stage: deployinfra_prd
-#   displayName: 'Deploy PRD Environment'
-#   condition: eq(variables['build.sourceBranch'], 'refs/heads/main')
-#   variables:
-#   - template: ../configuration/configuration-infra-PRD.variables.yml
-#   jobs:
-#   - template: templates/deploy-env-infra.template.yml
-#     parameters:
-#       environmentName: $(ENVIRONMENT)
-#       serviceConnection: $(SERVICECONNECTION_RG)
-#       resourceGroup: $(RESOURCE_GROUP)
-#       location: $(LOCATION)
-#       storageAccount: $(STORAGEACCOUNT)
-#       keyVault: $(KEYVAULT)
-#       appInsights: $(APPINSIGHTS)
-#       containerRegistry: $(CONTAINERREGISTRY)
-#       amlWorkspace: $(AMLWORKSPACE)
+    - name: 'Deploy azure machine learning workspace'
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az --version
+          az deployment group create --resource-group 'rg-pvtws-mlops-sdkv2-bicep-test' \
+          --template-file main.bicep \
+          --parameters \
+            location='canadacentral' \
+            storageAccount='samlopsdevtmpl' \
+            keyVaultName='kvmlopsdevtmpl' \ 
+            appInsightsName='aimlopsdevtmpl' \
+            containerRegistryName='crmlopsdevtmpl' \
+            amlWorkspaceName='mlopsdevtmpl'
