@@ -1,41 +1,39 @@
+variable "subscription_id" {
+  type    = string
+  default = "dbbcdca6-1b09-4291-bc2c-cf41162fdc05"
+}
+
+variable "tenant_id" {
+  type    = string
+  default = "5d30fd05-535c-4b0e-bd25-bb39a1c98fe3"
+}
+variable "client_id" {
+  type    = string
+  default = "d14fc959-9ec7-43c3-b26d-ef40968f031a"
+}
+variable "client_secret" {
+  type    = string
+  default = "eee8Q~~3ky0CCHc7MMTDE5g7Vnu~3TFVttwEkaM~"
+}
+##############################
+## Resource Group Variables
+##############################
 variable "basename" {
-  type = string
-  # default = "mlopsv2"
-  default = ""
+  type    = string
+  default = "mlops"
+}
+
+variable "project_code" {
+  type    = string
+  default = "v2test"
+}
+
+variable "version_num" {
+  type    = string
+  default = "001"
 }
 
 variable "location" {
-  type = string
-  # default = "westus2"
-  default = ""
-}
-
-variable "resource_group_name" {
-  type = string
-  # default = "rg-mlopsv2-aml-001"
-  default = ""
-}
-
-variable "application_insights_id" {
-  type = string
-  # default = "ai-mlopsv2-appinsight-001"
-  default = ""
-}
-
-variable "key_vault_id" {
-  type = string
-  # default = "kv-mlopsv2-keyvault-001"
-  default = ""
-}
-
-variable "storage_account_id" {
-  type = string
-  # default = "sa-mlopsv2-storageaccount-001"
-  default = ""
-}
-
-variable "container_registry_id" {
-  type = string
-  # default = "cr-mlopsv2-containerregistery-001"
-  default = ""
+  type    = string
+  default = "westus2"
 }
